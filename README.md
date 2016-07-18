@@ -121,3 +121,8 @@
 #暂需框架
 1.Koa
 2.Bluebird
+
+#ubuntu 安装mongodb
+    开机自启动
+    export PATH=$PATH:/opt/mongodb/bin
+    mongod --dbpath /opt/mongodb/data/moka/ --logpath /opt/mongodb/log/mongodb.log --logappend &
