@@ -179,3 +179,7 @@
     --configsvr # 声明这是一个集群的config服务,默认端口27019，默认目录/data/configdb
     --shardsvr # 声明这是一个集群的分片,默认端口27018
     --noMoveParanoia # 关闭偏执为moveChunk数据保存
+    
+    
+    
+# 表结构
