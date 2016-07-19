@@ -4,7 +4,6 @@
 'use strict';
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var Promise = mongoose.Promise;
 var UserSchema = new Schema({
     user: String,
     password: String,
@@ -17,15 +16,6 @@ var UserSchema = new Schema({
 UserSchema.statics.findById = function (id) {
     return this.find({'_id':id}).exec();
 };
-
-UserSchema.pre('save',function (error, data) {
-    return new Promise.ES6(function(resolve, reject){
-        if(error){
-            reject(error);
-        }
-        resolve(data);
-    });
-});
 
 module.exports = function (db) {
     db.model('User', UserSchema);
