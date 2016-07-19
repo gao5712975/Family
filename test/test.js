@@ -33,7 +33,7 @@ var TestSchema = new Schema({
     }
 });
 
-var db = mongoose.connect('mongodb://127.0.0.2/moka').connection;
+var db = mongoose.connect('mongodb://127.0.0.1/moka').connection;
 db.on('disconnected', function () {
     console.info("ok")
 });

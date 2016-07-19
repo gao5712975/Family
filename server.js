@@ -5,7 +5,7 @@ var express = require("./config/express"),
     config = require("./config/config"),
     mongoose = require("mongoose");
 
-var options = { server: { socketOptions: { keepAlive: 1 } } };
+var options = {};
 var db = mongoose.connect(config.db,options).connection;
 
 db.once('open',function () {

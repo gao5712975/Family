@@ -5,8 +5,8 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var UserSchema = new Schema({
-    user: String,
-    password: String,
+    user: {type:String,required:[true, '请填写用户名']},
+    password: {type:String,required:[true, '请填写用户名']},
     valid:{type:Number,default:0},
     sort:Number,
     create_time: {type: Date, default: new Date()},
@@ -18,5 +18,5 @@ UserSchema.statics.findById = function (id) {
 };
 
 module.exports = function (db) {
-    db.model('User', UserSchema);
+    db.model('User', UserSchema,'User');
 };
