@@ -6,10 +6,20 @@ var mongoose = require("mongoose");
 var User = mongoose.model('User');
 var UserDetail = mongoose.model('UserDetail');
 
-exports.findUserEntityById = function (req, res) {
-    User.findById(req.body).then(
+exports.findEntityById = function (req, res) {
+    User.findEntityById(req.body._id).then(
         function (doc) {
-            console.info(doc);
+            res.send(doc);
+        },
+        function (err) {
+            console.info(err);
+        }
+    )
+};
+
+exports.findUsersById = function (req, res) {
+    User.findUsersById(req.body._id).then(
+        function (doc) {
             res.send(doc);
         },
         function (err) {
@@ -19,23 +29,23 @@ exports.findUserEntityById = function (req, res) {
 };
 
 exports.saveUserEntity = function (req, res) {
+    var _id = new mongoose.Types.ObjectId;
+    req.body._userDetailId = _id;
     var user = new User(req.body);
-    var promise = user.save();
-    promise.then(
+    user.save().then(
         function (doc) {
-            saveUserDetail({_userId:doc._id});
+            saveUserDetail({_id:_id,_userId:doc._id});
             console.info(doc);
             res.send({status: 200});
         },
         function (err) {
             console.info(err);
         }
-    )
+    );
     
     function saveUserDetail(body) {
         var UserDetails = new UserDetail(body);
-        var $q = UserDetails.save();
-        $q.then(
+        UserDetails.save().then(
             function (doc) {
                 console.info(doc)
             },
@@ -44,4 +54,15 @@ exports.saveUserEntity = function (req, res) {
             }
         )
     }
-}
+};
+
+exports.updateEntity = function (req, res) {
+    User.updateEntity(req.body).then(
+        function (doc) {
+            res.send(doc);
+        },
+        function (err) {
+            console.info(err);
+        }
+    )
+};

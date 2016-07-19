@@ -5,6 +5,7 @@ var express = require("./config/express"),
     config = require("./config/config"),
     mongoose = require("mongoose");
 
+mongoose.set('debug', true);
 var options = {};
 var db = mongoose.connect(config.db,options).connection;
 
