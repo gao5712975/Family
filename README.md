@@ -189,7 +189,8 @@
     -o：备份的数据存放位置，例如：c:\data\dump，当然该目录需要提前建立，在备份完成后，系统自动在dump目录下建立一个test目录，这个目录里面存放该数据库实例的备份数据。
     
 ##整库恢复
-    mongorestore -h dbhost -d dbname –directoryperdb dbdirectory
+    mongorestore -h dbhost -d dbname dbdirectory
+    mongorestore -h 127.0.0.1 -d moka public/mongodb/back/moka
     -h：MongoDB所在服务器地址
     -d：需要恢复的数据库实例，例如：test，当然这个名称也可以和备份时候的不一样，比如test2
     –directoryperdb：备份数据所在位置，例如：c:\data\dump\test，这里为什么要多加一个test，而不是备份时候的dump，读者自己查看提示吧！
