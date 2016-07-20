@@ -12,6 +12,5 @@ var db = mongoose.connect(config.db,options).connection;
 db.once('open',function () {
     var app = express(db);
     app.listen(config.port);
-    // Logging initialization
     console.log('MEAN.JS application started on port ' + config.port);
 });

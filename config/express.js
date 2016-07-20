@@ -39,7 +39,7 @@ module.exports = function (db) {
             proxy:true,
             store: new mongoStore({
             url: config.db,
-            collection : 'sessions'
+            collection : 'Sessions'
         })
     }));
 

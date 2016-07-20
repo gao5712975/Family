@@ -1,5 +1,6 @@
 /**
  * Created by Yuan on 2016/7/19.
+ * 机构
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;

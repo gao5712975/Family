@@ -10,7 +10,12 @@ var nodemon = require('gulp-nodemon');
 
 gulp.task('start', function () {
     nodemon({
-        script: 'server.js'
+        script: 'server.js',
+        ignore:[
+            'public/**', 
+            'test/**',
+            'gulpfile.js'
+        ]
     }).on('restart', function () {
         console.log('restarted!')
     })
