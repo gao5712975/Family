@@ -7,6 +7,7 @@ var runSequence = require('run-sequence'); //异步任务
 var gulpWatch = require('gulp-watch'); //监听插件
 var uglify = require('gulp-uglify');
 var nodemon = require('gulp-nodemon');
+var gulpConcat = require('gulp-concat');
 
 gulp.task('start', function () {
     nodemon({
@@ -14,9 +15,42 @@ gulp.task('start', function () {
         ignore:[
             'public/**', 
             'test/**',
-            'gulpfile.js'
+            'gulpfile.js',
+            'webApp',
+            'www',
+            'node_modules'
         ]
     }).on('restart', function () {
         console.log('restarted!')
+    });
+
+    gulp.start('watch');
+});
+
+gulp.task('watch',function () {
+    runSequence(['build'],function () {
+        gulpWatch(['webApp/**'],function () {
+            gulp.start('build');
+        })
     })
-})
+});
+
+gulp.task('clean', function(){
+    return del('www/src');
+});
+
+// gulp.task('concat',function () {
+//     return gulp.src(['webApp/app/**/*.js'])
+//         .pipe(gulpConcat('all.js'))
+//         .pipe(gulp.dest('www/src/'))
+// });
+//
+// gulp.task('copy',function () {
+//     return gulp.src(['webApp/app/application.js','webApp/static/**','webApp/views/**'])
+//         .pipe(gulp.dest('www/src/'));
+// });
+//
+gulp.task('build',['clean'],function () {
+    return gulp.src('webApp/**')
+        .pipe(gulp.dest('www/src/'))
+});

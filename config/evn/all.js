@@ -8,6 +8,6 @@ module.exports = {
     port: 3000,
     bodyParser: {
         json: {limit: '150kb'},
-        urlencoded: {limit: '150kb', extended: true}
+        urlencoded: {extended: true}
     }
 };

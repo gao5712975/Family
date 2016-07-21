@@ -39,6 +39,7 @@ exports.saveUserEntity = function (req, res) {
             res.send({status: 200});
         },
         function (err) {
+            res.send({status: 500,msg:err});
             console.info(err);
         }
     );

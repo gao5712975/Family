@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+  <meta charset="UTF-8">
+  <title>moka</title>
+  <script src="src/static/angular/angular.js"></script>
+  <script src="src/static/ui.router/angular-ui-router.js"></script>
+  <script src="src/app/application.js"></script>
+  <script src="src/app/user/user.js"></script>
+</head>
+<body>
+  <div ng-controller="UserCtrl">
+    <form>
+      <label>用户名：<input ng-model="user.user"></label>
+      <label>密  码：<input ng-model="user.password"></label>
+      <button ng-click="save()">提交</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -7,10 +7,12 @@ var express = require('express'),
     nwPath = process.execPath,
     nwDir = path.dirname(nwPath),
     session = require("express-session"),
-    mongoStore = require('connect-mongo')(session),
+    // mongoStore = require('connect-mongo')(session),
+    redisStore = require('connect-redis')(session),
     flash = require('connect-flash'),
     logger = require('morgan'),
     bodyParser = require("body-parser"),
+    multer = require('multer'),
     cookieParser = require("cookie-parser"),
     methodOverride = require("method-override"),
     config = require("./config");
@@ -24,7 +26,8 @@ module.exports = function (db) {
     app.use(logger('dev'));
     app.use(bodyParser.json(config.bodyParser.json));// for parsing application/json
     app.use(bodyParser.urlencoded(config.bodyParser.urlencoded));// for parsing application/x-www-form-urlencoded
-    app.use(methodOverride());
+
+    // app.use(methodOverride());
     // CookieParser should be above session
     app.use(cookieParser());
 
@@ -33,14 +36,11 @@ module.exports = function (db) {
 
     // use session
     app.use(session({
-            secret: 'moka',
-            resave: true,
-            saveUninitialized: true,
-            proxy:true,
-            store: new mongoStore({
-            url: config.db,
-            collection : 'Sessions'
-        })
+        secret: 'moka',
+        resave: true,
+        saveUninitialized: true,
+        proxy: true,
+        store: new redisStore()
     }));
 
     app.use(flash());
