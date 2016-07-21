@@ -197,3 +197,10 @@
     –drop：恢复的时候，先删除当前数据，然后恢复备份的数据。就是说，恢复后，备份后添加修改的数据都会被删除，慎用哦！
     
 # 表结构
+
+#ubuntu 安装redis
+    1.下载源码http://redis.io/download
+    2.解压进入目录 make && make install
+    3.将××/utils/redis_init_script 拷贝到/etc/init.d/ 下
+    3.将××/redis.conf 拷贝到/etc/redis/ 下
+    5.安装sysv-rc-conf sudo apt-get install sysv-rc-conf

@@ -43,7 +43,6 @@ module.exports = function (db) {
         })
     }));
 
-    // connect flash for flash messages - should be declared after sessions
     app.use(flash());
 
     app.get("/", function (req, res) {
