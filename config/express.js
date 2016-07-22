@@ -7,14 +7,13 @@ var express = require('express'),
     nwPath = process.execPath,
     nwDir = path.dirname(nwPath),
     session = require("express-session"),
-    // mongoStore = require('connect-mongo')(session),
+    mongoStore = require('connect-mongo')(session),
     redisStore = require('connect-redis')(session),
     flash = require('connect-flash'),
     logger = require('morgan'),
     bodyParser = require("body-parser"),
     multer = require('multer'),
     cookieParser = require("cookie-parser"),
-    methodOverride = require("method-override"),
     config = require("./config");
     
 module.exports = function (db) {
@@ -27,7 +26,6 @@ module.exports = function (db) {
     app.use(bodyParser.json(config.bodyParser.json));// for parsing application/json
     app.use(bodyParser.urlencoded(config.bodyParser.urlencoded));// for parsing application/x-www-form-urlencoded
 
-    // app.use(methodOverride());
     // CookieParser should be above session
     app.use(cookieParser());
 
@@ -35,12 +33,32 @@ module.exports = function (db) {
     app.use(express.static(path.join(__dirname, 'public')));
 
     // use session
+    // app.use(session({
+    //     secret: 'moka',
+    //     resave: true,
+    //     saveUninitialized: true,
+    //     proxy:true,
+    //     store: new mongoStore({
+    //         url: config.db,
+    //         collection : 'Sessions'
+    //     })
+    // }));
     app.use(session({
+        resave: false,
+        saveUninitialized: false,
         secret: 'moka',
-        resave: true,
-        saveUninitialized: true,
-        proxy: true,
-        store: new redisStore()
+        // cookie: {maxAge: 100000},
+        cookie: {
+            secure: true,
+            maxAge: 1000 * 60 * 60
+        },
+        store: new redisStore({
+            host: "localhost",
+            port: 6379,
+            db: 0,
+            ttl : 1000,
+            prefix:'moka'
+        })
     }));
 
     app.use(flash());
@@ -50,13 +68,27 @@ module.exports = function (db) {
     });
 
     // Globbing model files
-    config.getGlobbedFiles("./app/modules/**/model/*.js").forEach(function (modelPath) {
+    config.getGlobFiles("./app/modules/**/model/*.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(db);
     });
 
     // Globbing routes files
-    config.getGlobbedFiles("./app/modules/**/route/*.js").forEach(function (modelPath) {
+    config.getGlobFiles("./app/modules/**/route/*.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
+    });
+
+    app.all('*',function (req, res, next) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With');
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+
+        if (req.method == 'OPTIONS') {
+            res.statusCode = 200;
+            res.send('OPTIONS');
+        }
+        else {
+            next();
+        }
     });
 
     // Assume 'not found' in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.
@@ -73,10 +105,11 @@ module.exports = function (db) {
 
     // Assume 404 since no middleware responded
     app.use(function (req, res) {
-        res.status(404).render('404', {
-            url: req.originalUrl,
-            error: 'Not Found'
-        });
+        res.statusCode = 404;
+        res.send({
+            status:404,
+            url:req.originalUrl
+        })
     });
 
     return app;

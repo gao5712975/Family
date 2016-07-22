@@ -4,6 +4,8 @@
 "use strict";
 var UserDetail = require("../controller/userDetailCtrl");
 
+var namespace = '/userDetail';
+
 module.exports = function (app) {
-    app.post("/findUserDetailEntityById.htm",UserDetail.findUserDetailEntityById);
+    app.post(namespace + "/findById.htm",UserDetail.findById);
 };

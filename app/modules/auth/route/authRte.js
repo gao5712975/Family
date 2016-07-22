@@ -4,6 +4,8 @@
 'use strict';
 var auth = require('../controller/authCtrl');
 
+var namespace = '/auth';
+
 module.exports = function (app) {
-    app.post("/saveAuthEntity.htm",auth.saveAuthEntity)
+    app.post(namespace + "/saveEntity.htm",auth.saveEntity)
 };

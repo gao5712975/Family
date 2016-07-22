@@ -5,36 +5,39 @@
 var mongoose = require("mongoose");
 var Role = mongoose.model('Role');
 
-exports.saveRoleEntity = function (req, res) {
+exports.saveEntity = function (req, res) {
     var role = new Role(req.body);
     role.save(req.body).then(
         function (doc) {
             res.send(doc);
         },
         function (err) {
-            console.info(err);
+            res.statusCode = 500;
+            res.send(err);
         }
     )
 };
 
-exports.findRolesById = function (req, res) {
-    Role.findRolesById(req.body._id).then(
+exports.findById = function (req, res) {
+    Role.findById(req.body._id).then(
         function (doc) {
             res.send(doc);
         },
         function (err) {
-            console.info(err);
+            res.statusCode = 500;
+            res.send(err);
         }
     )
 };
 
-exports.findRolesAllAuthById = function (req, res) {
-    Role.findRolesAllAuthById(req.body._id).then(
+exports.findAllAuthById = function (req, res) {
+    Role.findAllAuthById(req.body._id).then(
         function (doc) {
             res.send(doc);
         },
         function (err) {
-            console.info(err);
+            res.statusCode = 500;
+            res.send(err);
         }
     )
 };

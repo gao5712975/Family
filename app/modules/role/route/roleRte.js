@@ -4,8 +4,10 @@
 'use strict';
 var role = require('../controller/roleCtrl');
 
+var namespace = '/role';
+
 module.exports = function (app) {
-    app.post("/saveRoleEntity.htm",role.saveRoleEntity);
-    app.post("/findRolesById.htm",role.findRolesById);
-    app.post("/findRolesAllAuthById.htm",role.findRolesAllAuthById);
+    app.post(namespace + "/saveEntity.htm",role.saveEntity);
+    app.post(namespace + "/findById.htm",role.findById);
+    app.post(namespace + "/findAllAuthById.htm",role.findAllAuthById);
 };

@@ -12,16 +12,9 @@ var AgencySchema = new Schema({
     agencyNumber:{
         type:String
     },
-    parentId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Agency'
-    }
+    parentId: Schema.Types.ObjectId,
+    parentList:Array
 });
-
-AgencySchema.statics.findAgencyNextAll = function (id) {
-    return this.find({_id:id})
-        .populate('Agency').exec();
-};
 
 module.exports = function (db) {
     db.model('Agency', AgencySchema,'Agency');

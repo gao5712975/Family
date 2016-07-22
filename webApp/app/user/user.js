@@ -3,17 +3,13 @@
  */
 ApplicationConfig.registerModule("userModule");
 
-var app = angular.module('userModule',[]);
-
-app.controller('UserCtrl',['$scope','$http',function ($scope,$http) {
+angular.module('userModule',[])
+    
+.controller('UserCtrl',['$scope','$http',function ($scope,$http) {
     $scope.user = {};
     $scope.user.sort = 0;
     $scope.save = function () {
-        $http.post(baseUrl + '/saveUserEntity.htm',JSON.stringify($scope.user),{
-            headers:{
-                'Accept':'application/json'
-            }
-        }).success(function (res) {
+        $http.post(baseUrl + '/user/saveEntity.htm', $scope.user,configJson).success(function (res) {
             console.info(res);
         })
     }

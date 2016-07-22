@@ -8,7 +8,7 @@ var glob = require('glob');
 
 module.exports = require("./evn/all");
 
-module.exports.getGlobbedFiles = function(globPatterns, removeRoot) {
+module.exports.getGlobFiles = function(globPatterns, removeRoot) {
     // For context switching
     var _this = this;
 
@@ -21,7 +21,7 @@ module.exports.getGlobbedFiles = function(globPatterns, removeRoot) {
     // If glob pattern is array so we use each pattern in a recursive way, otherwise we use glob
     if (_.isArray(globPatterns)) {
         globPatterns.forEach(function(globPattern) {
-            output = _.union(output, _this.getGlobbedFiles(globPattern, removeRoot));
+            output = _.union(output, _this.getGlobFiles(globPattern, removeRoot));
         });
     } else if (_.isString(globPatterns)) {
         if (urlRegex.test(globPatterns)) {

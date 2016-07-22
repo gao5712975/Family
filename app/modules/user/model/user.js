@@ -27,7 +27,7 @@ var UserSchema = new Schema({
     update_time: {type: Date, default: new Date()}
 });
 
-UserSchema.statics.findEntityById = function (id) {
+UserSchema.statics.findById = function (id) {
     return this.find({_id:id}).exec();
 };
 

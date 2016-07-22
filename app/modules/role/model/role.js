@@ -17,12 +17,12 @@ var RoleSchema = new Schema({
     ]
 });
 
-RoleSchema.statics.findRolesAllAuthById = function (id) {
+RoleSchema.statics.findAllAuthById = function (id) {
     return this.find({_id:id})
         .populate('authList').exec();
 };
 
-RoleSchema.statics.findRolesById = function (id) {
+RoleSchema.statics.findById = function (id) {
     return this.find({_id:id}).exec();
 };
 

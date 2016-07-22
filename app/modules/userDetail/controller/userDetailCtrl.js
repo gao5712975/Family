@@ -5,13 +5,14 @@
 var mongoose = require("mongoose");
 var UserDetail = mongoose.model('UserDetail');
 
-exports.findUserDetailEntityById = function (req, res) {
+exports.findById = function (req, res) {
     UserDetail.findById(req.body).then(
         function (data) {
             res.send(data);
         },
         function (err) {
-            console.info(err);
+            res.statusCode = 500;
+            res.send(err);
         }
     )
 };

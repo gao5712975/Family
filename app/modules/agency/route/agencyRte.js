@@ -4,7 +4,10 @@
 'use strict';
 var agency = require('../controller/agencyCtrl');
 
+var namespace = '/agency';
+
 module.exports = function (app) {
-    app.post("/saveAgencyEntity.htm",agency.saveAgencyEntity);
-    app.post("/findAgencyNextAll.htm",agency.findAgencyNextAll);
+    app.post(namespace + "/findById.htm",agency.findById);
+    app.post(namespace + "/saveEntity.htm",agency.saveEntity);
+    app.post(namespace + "/findNextAllById.htm",agency.findNextAllById);
 };
