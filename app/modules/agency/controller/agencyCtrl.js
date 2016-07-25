@@ -49,7 +49,7 @@ exports.findNextAllById = function (req, res) {
                 if(doc && doc.length > 0){
                     _obj.parentList = doc;
                     asdf(_obj.parentList,[]);
-                    
+
                 }else{
                     res.send(_obj)
                 }
@@ -70,6 +70,6 @@ exports.findNextAllById = function (req, res) {
         //         }
         //     }
         // )
-        
+
     }
 };
