@@ -9,7 +9,7 @@ angular.module('userModule',[])
     $scope.user = {};
     $scope.user.sort = 0;
     $scope.save = function () {
-        $http.post(baseUrl + '/user/saveEntity.htm', $scope.user,configJson).success(function (res) {
+        $http.post(baseUrl + '/user/saveEntity.htm', $scope.user).success(function (res) {
             console.info(res);
         })
     }
