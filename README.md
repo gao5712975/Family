@@ -127,6 +127,9 @@
     export PATH=$PATH:/opt/mongodb/bin
     mongod --dbpath /opt/mongodb/data/db/ --logpath /opt/mongodb/data/logs/mongodb.log --logappend &
 
+###修改Collection名称 
+    db.getCollection('Agency').renameCollection('Organize')
+
 ##mongod的主要参数有
 
     --quiet # 安静输出
