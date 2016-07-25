@@ -53,7 +53,7 @@ module.exports = function (db) {
             maxAge: 1000 * 60 * 60
         },
         store: new redisStore({
-            host: "localhost",
+            host: "127.0.0.1",
             port: 6379,
             db: 0,
             ttl : 1000,
@@ -67,6 +67,20 @@ module.exports = function (db) {
         res.send({status:200})
     });
 
+    app.all("*", function (req, res,next) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'X-Request-With,Content-Type');
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+        
+        if (req.method == 'OPTIONS') {
+            res.statusCode = 200;
+            res.send('OPTIONS');
+        } else {
+            next();
+        }
+    });
+
+
     // Globbing model files
     config.getGlobFiles("./app/modules/**/model/*.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(db);
@@ -75,20 +89,6 @@ module.exports = function (db) {
     // Globbing routes files
     config.getGlobFiles("./app/modules/**/route/*.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
-    });
-
-    app.all('*',function (req, res, next) {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With');
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-
-        if (req.method == 'OPTIONS') {
-            res.statusCode = 200;
-            res.send('OPTIONS');
-        }
-        else {
-            next();
-        }
     });
 
     // Assume 'not found' in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.

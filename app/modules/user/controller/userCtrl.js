@@ -37,19 +37,18 @@ exports.saveEntity = function (req, res) {
     var user = new User(req.body);
     user.save().then(
         function (doc) {
-            saveUserDetail({_id:_id,userId:doc._id});
-            res.send(doc);
+            var userDetails = new UserDetail({_id:_id,userId:doc._id});
+            userDetails.save().then(
+                function (doc) {
+                    res.json(doc);
+                }
+            );
         },
         function (err) {
             res.statusCode = 500;
             res.send(err);
         }
     );
-    
-    function saveUserDetail(body) {
-        var userDetails = new UserDetail(body);
-        userDetails.save().then()
-    }
 };
 
 exports.updateEntity = function (req, res) {

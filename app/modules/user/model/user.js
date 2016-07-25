@@ -18,6 +18,16 @@ var UserSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'UserDetail'
     },
+    sectorId:{
+        type:Schema.Types.ObjectId,
+        ref:'Agency'
+    },
+    companyId:{
+        type:Schema.Types.ObjectId,
+        ref:'Company'
+    },
+    sectorName:String,
+    companyName:String,
     valid:{
         type:Number,
         default:0

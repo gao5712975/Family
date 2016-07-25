@@ -5,7 +5,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var AgencySchema = new Schema({
+var OrganizeSchema = new Schema({
     name:{
         type:String
     },
@@ -17,5 +17,5 @@ var AgencySchema = new Schema({
 });
 
 module.exports = function (db) {
-    db.model('Agency', AgencySchema,'Agency');
+    db.model('Organize', OrganizeSchema,'Organize');
 };

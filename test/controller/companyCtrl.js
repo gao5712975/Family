@@ -3,11 +3,11 @@
  */
 'use strict';
 var mongoose = require("mongoose");
-var Role = mongoose.model('Role');
+var Company = mongoose.model('Company');
 
-exports.saveRoleEntity = function (req, res) {
-    var role = new Role(req.body);
-    role.save(req.body).then(
+exports.saveEntity = function (req, res) {
+    var company = new Company(req.body);
+    company.save(req.body).then(
         function (doc) {
             res.send(doc);
         },
