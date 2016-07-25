@@ -8,7 +8,9 @@ var CompanySchema = new Schema({
     name:{
         type:String
     },
-    authList:Array
+    rul:{
+        type:String
+    }
 });
 
 module.exports = function (db) {

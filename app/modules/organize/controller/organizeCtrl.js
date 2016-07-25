@@ -33,6 +33,7 @@ exports.findById = function (req, res) {
 exports.findNextAllById = function (req, res) {
     Organize.findOne({_id:req.body._id}).then(
         function (doc) {
+            if(!doc) res.send({code:200,msg:'没有数据！'});
             Organize.find({parentId:doc._id}).then(
                 function (arr) {
                     if(arr.length > 0){
