@@ -9,8 +9,8 @@ var OrganizeSchema = new Schema({
     name:{
         type:String
     },
-    agencyNumber:{
-        type:String
+    sort:{
+        type:Number  
     },
     parentId: Schema.Types.ObjectId,
     parentList:Array

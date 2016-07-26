@@ -8,10 +8,10 @@ var Auth = mongoose.model('Auth');
 exports.saveEntity = function (req, res) {
     var auth = new Auth(req.body);
     auth.save(req.body).then(
-        function (doc) {
+        (doc) =>{
             res.send(doc);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }

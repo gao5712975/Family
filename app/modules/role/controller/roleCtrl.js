@@ -8,10 +8,10 @@ var Role = mongoose.model('Role');
 exports.saveEntity = function (req, res) {
     var role = new Role(req.body);
     role.save(req.body).then(
-        function (doc) {
+        (doc) =>{
             res.send(doc);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }
@@ -20,10 +20,10 @@ exports.saveEntity = function (req, res) {
 
 exports.findById = function (req, res) {
     Role.findById(req.body._id).then(
-        function (doc) {
+        (doc) =>{
             res.send(doc);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }
@@ -32,10 +32,10 @@ exports.findById = function (req, res) {
 
 exports.findAllAuthById = function (req, res) {
     Role.findAllAuthById(req.body._id).then(
-        function (doc) {
+        (doc) =>{
             res.send(doc);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }

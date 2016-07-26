@@ -7,10 +7,10 @@ var UserDetail = mongoose.model('UserDetail');
 
 exports.findById = function (req, res) {
     UserDetail.findById(req.body).then(
-        function (data) {
+        (data) =>{
             res.send(data);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }

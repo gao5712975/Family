@@ -7,11 +7,11 @@ var Organize = mongoose.model('Organize');
 
 exports.saveEntity = function (req, res) {
     var organize = new Organize(req.body);
-    organize.save(req.body).then(
-        function (doc) {
+    organize.save().then(
+        (doc) =>{
             res.send(doc);
         },
-        function (err) {
+        (err) => {
             res.statusCode = 500;
             res.send(err);
         }
@@ -20,10 +20,10 @@ exports.saveEntity = function (req, res) {
 
 exports.findById = function (req, res) {
     Organize.find({_id:req.body._id}).then(
-        function (doc) {
+        (doc) =>{
             res.send(doc)
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }
@@ -32,14 +32,14 @@ exports.findById = function (req, res) {
 
 exports.findNextAllById = function (req, res) {
     Organize.findOne({_id:req.body._id}).then(
-        function (doc) {
+        (doc) =>{
             if(!doc) res.send({code:200,msg:'没有数据！'});
             Organize.find({parentId:doc._id}).then(
-                function (arr) {
+                (arr) =>{
                     if(arr.length > 0){
                         doc.parentList = arr;
-                        callback(doc,doc.parentList,0,function (data) {
-                            res.json(data);
+                        callback(doc,doc.parentList,0,(data) =>{
+                            res.send(data);
                         });
                     }else{
                         res.send(doc);
@@ -47,7 +47,7 @@ exports.findNextAllById = function (req, res) {
                 }
             );
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }
@@ -58,27 +58,27 @@ exports.findNextAllById = function (req, res) {
      * @param doc
      * @param array
      * @param num
-     * @param callback
+     * @param back
      */
-    function callback(doc,array,num,callback) {
+    function callback(doc,array,num,back) {
         if(!num){
             num = 0;
         }
         var arr = [];
-        array.forEach(function (data) {
+        array.forEach((data) =>{
             arr.push(Organize.find({parentId:data._id}));
         });
         Promise.all(arr).then(
-            function (arr) {
+            (arr) =>{
                 num += array.length;
                 for(var i = 0,j = arr.length;i<j;i++){
                     var data = arr[i];
                     if(data.length > 0){
                         array[i].parentList = data;
-                        callback(doc,array[i].parentList,--num,callback);
+                        callback(doc,array[i].parentList,--num,back);
                     }else{
                         --num;
-                        num == 0 && callback(doc);
+                        num == 0 && back(doc);
                     }
                 }
             }

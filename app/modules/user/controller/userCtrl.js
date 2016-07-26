@@ -8,10 +8,10 @@ var UserDetail = mongoose.model('UserDetail');
 
 exports.findById = function (req, res) {
     User.findById(req.body._id).then(
-        function (doc) {
+        (doc) =>{
             res.send(doc);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }
@@ -20,10 +20,10 @@ exports.findById = function (req, res) {
 
 exports.findUsersById = function (req, res) {
     User.findUsersById(req.body._id).then(
-        function (doc) {
+        (doc) =>{
             res.send(doc);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }
@@ -33,30 +33,26 @@ exports.findUsersById = function (req, res) {
 exports.saveEntity = function (req, res) {
     var _id = new mongoose.Types.ObjectId;
     req.body.userDetailId = _id;
-    console.info(req.body);
     var user = new User(req.body);
     user.save().then(
-        function (doc) {
+        (doc) =>{
             var userDetails = new UserDetail({_id:_id,userId:doc._id});
-            userDetails.save().then(
-                function (doc) {
-                    res.json(doc);
-                }
-            );
+            userDetails.save().then();
+            res.send(doc);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }
     );
 };
 
-exports.updateEntity = function (req, res) {
-    User.updateEntity(req.body).then(
-        function (doc) {
+exports.updatePassword = function (req, res) {
+    User.updatePassword(req.body).then(
+        (doc) =>{
             res.send(doc);
         },
-        function (err) {
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }
@@ -65,10 +61,11 @@ exports.updateEntity = function (req, res) {
 
 exports.removeEntityById = function (req, res) {
     User.remove({_id:req.body._id}).then(
-        function (doc) {
+        (doc) =>{
             res.send(doc);
             removeUserDetail(req.body._id);
-        },function (err) {
+        },
+        (err) =>{
             res.statusCode = 500;
             res.send(err);
         }

@@ -8,10 +8,10 @@ var Company = mongoose.model('Company');
 exports.saveEntity = function (req, res) {
     var company = new Company(req.body);
     company.save(req.body).then(
-        function (doc) {
+        (doc) => {
             res.send(doc);
         },
-        function (err) {
+        (err) =>{
             console.info(err);
         }
     )

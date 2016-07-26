@@ -18,15 +18,20 @@ var UserSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'UserDetail'
     },
-    sectorId:{
+    organizeId:{
         type:Schema.Types.ObjectId,
-        ref:'Agency'
+        ref:'Organize'
     },
     companyId:{
         type:Schema.Types.ObjectId,
         ref:'Company'
     },
-    sectorName:String,
+    roleId:{
+        type:Schema.Types.ObjectId,
+        ref:'Role'
+    },
+    roleName:String,
+    organizeName:String,
     companyName:String,
     valid:{
         type:Number,
@@ -43,10 +48,14 @@ UserSchema.statics.findById = function (id) {
 
 UserSchema.statics.findUsersById = function (id) {
     return this.find({_id:id})
-        .populate('userDetailId').exec();
+        .populate('userDetailId')
+        .populate('organizeId')
+        .populate('companyId')
+        .populate('roleId')
+        .exec();
 };
 
-UserSchema.statics.updateEntity = function (body) {
+UserSchema.statics.updatePassword = function (body) {
     return this.update({_id:body._id},{password:body.password}).exec();
 };
 

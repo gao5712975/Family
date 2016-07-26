@@ -9,7 +9,7 @@ var namespace = '/user';
 module.exports = function (app) {
     app.post(namespace + "/findById.htm",User.findById);
     app.post(namespace + "/findUsersById.htm",User.findUsersById);
-    app.post(namespace + "/updateEntity.htm",User.updateEntity);
+    app.post(namespace + "/updatePassword.htm",User.updatePassword);
     app.post(namespace + "/saveEntity.htm",User.saveEntity);
     app.post(namespace + "/removeEntityById.htm",User.removeEntityById);
 };
