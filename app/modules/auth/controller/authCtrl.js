@@ -4,6 +4,14 @@
 'use strict';
 var mongoose = require("mongoose");
 var Auth = mongoose.model('Auth');
+var Page = require('../../base/page');
+
+exports.findList = function (req, res) {
+    Page(req.body.pageIndex,req.body.pageSize,Auth,{},(err,doc) => {
+        if(err) res.send(err);
+        res.send(doc);
+    })
+};
 
 exports.saveEntity = function (req, res) {
     var auth = new Auth(req.body);

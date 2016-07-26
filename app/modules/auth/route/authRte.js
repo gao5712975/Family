@@ -7,5 +7,6 @@ var auth = require('../controller/authCtrl');
 var namespace = '/auth';
 
 module.exports = function (app) {
+    app.post(namespace + "/findList.htm",auth.findList);
     app.post(namespace + "/saveEntity.htm",auth.saveEntity)
 };

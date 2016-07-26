@@ -30,9 +30,10 @@ module.exports = function (db) {
     app.use(cookieParser());
 
     //静态文件 // Setting the app router and static folder
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static('public'));
+    // app.use(express.static('www'));
 
-    // use session
+    //use session
     // app.use(session({
     //     secret: 'moka',
     //     resave: true,
@@ -44,8 +45,8 @@ module.exports = function (db) {
     //     })
     // }));
     app.use(session({
-        resave: false,
-        saveUninitialized: false,
+        resave: true,
+        saveUninitialized: true,
         secret: 'moka',
         // cookie: {maxAge: 100000},
         cookie: {
@@ -64,14 +65,20 @@ module.exports = function (db) {
     app.use(flash());
 
     app.get("/", function (req, res) {
-        res.send({status:200})
+        console.info(req.session);
+        if(!req.session.userList){
+            req.session.userList = []
+        }
+        req.session.userList.push({
+            name:'moka'
+        });
+        res.send({status:2})
     });
 
     app.all("*", function (req, res,next) {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'X-Request-With,Content-Type');
         res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-        
         if (req.method == 'OPTIONS') {
             res.statusCode = 200;
             res.send('OPTIONS');
@@ -91,16 +98,14 @@ module.exports = function (db) {
         require(path.resolve(modelPath))(app);
     });
 
-    // Assume 'not found' in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.
+    //Assume 500 since no middleware responded
     app.use(function (err, req, res, next) {
-        // If the error object doesn't exists
         if (!err) return next();
-        // Log it
-        console.error(err.stack);
-        // Error page
-        res.status(500).render('500', {
+        res.send({
+            status:500,
+            url:req.originalUrl,
             error: err.stack
-        });
+        })
     });
 
     // Assume 404 since no middleware responded

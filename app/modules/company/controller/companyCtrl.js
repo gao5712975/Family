@@ -12,7 +12,8 @@ exports.saveEntity = function (req, res) {
             res.send(doc);
         },
         (err) =>{
-            console.info(err);
+            res.statusCode = 500;
+            res.send(err);
         }
     )
 };

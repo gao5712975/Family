@@ -4,6 +4,14 @@
 'use strict';
 var mongoose = require("mongoose");
 var Organize = mongoose.model('Organize');
+var Page = require('../../base/page');
+
+exports.findList = function (req, res) {
+    Page(req.body.pageIndex,req.body.pageSize,Organize,{},(err,doc) => {
+        if(err) res.send(err);
+        res.send(doc);
+    })
+};
 
 exports.saveEntity = function (req, res) {
     var organize = new Organize(req.body);
