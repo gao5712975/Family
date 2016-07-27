@@ -8,8 +8,8 @@ var Page = require('../../base/page');
 
 exports.findList = function (req, res) {
     Page(req.body.pageIndex,req.body.pageSize,Organize,{},(err,doc) => {
-        if(err) res.send(err);
-        res.send(doc);
+        if(err) res.send({code:500,msg:err});
+        res.send({code:200,doc:doc});
     })
 };
 
@@ -17,23 +17,35 @@ exports.saveEntity = function (req, res) {
     var organize = new Organize(req.body);
     organize.save().then(
         (doc) =>{
-            res.send(doc);
+            res.send({code:200,doc:doc});
         },
         (err) => {
             res.statusCode = 500;
-            res.send(err);
+            res.send({code:500,msg:err});
         }
     )
 };
 
 exports.findById = function (req, res) {
-    Organize.find({_id:req.body._id}).then(
+    Organize.findOne({_id:req.body._id}).then(
         (doc) =>{
-            res.send(doc)
+            res.send({code:200,doc:doc})
         },
         (err) =>{
             res.statusCode = 500;
-            res.send(err);
+            res.send({code:500,msg:err});
+        }
+    )
+};
+
+exports.findAll = function (req, res) {
+    Organize.find().then(
+        (doc) => {
+            res.send({code:200,doc:doc})
+        },
+        (err) => {
+            res.statusCode = 500;
+            res.send({code:500,msg:err});
         }
     )
 };
@@ -47,17 +59,17 @@ exports.findNextAllById = function (req, res) {
                     if(arr.length > 0){
                         doc.parentList = arr;
                         callback(doc,doc.parentList,0,(data) =>{
-                            res.send(data);
+                            res.send({code:200,doc:data});
                         });
                     }else{
-                        res.send(doc);
+                        res.send({code:200,doc:doc});
                     }
                 }
             );
         },
         (err) =>{
             res.statusCode = 500;
-            res.send(err);
+            res.send({code:500,msg:err});
         }
     );
 

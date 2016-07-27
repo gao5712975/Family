@@ -7,7 +7,7 @@ var express = require("./config/express"),
 
 mongoose.set('debug', true);
 var options = {};
-var db = mongoose.connect(config.db,options).connection;
+var db = mongoose.connect(config.mongoStore.url,options).connection;
 
 db.once('open',function () {
     var app = express(db);

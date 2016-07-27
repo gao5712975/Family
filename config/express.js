@@ -34,44 +34,29 @@ module.exports = function (db) {
     // app.use(express.static('www'));
 
     //use session
+    app.use(session({
+        secret: 'moka',
+        resave: true,
+        cookie: {maxAge: 30 * 60 * 1000},
+        saveUninitialized: true,
+        proxy:true,
+        store: new mongoStore(config.mongoStore)
+    }));
     // app.use(session({
-    //     secret: 'moka',
     //     resave: true,
     //     saveUninitialized: true,
-    //     proxy:true,
-    //     store: new mongoStore({
-    //         url: config.db,
-    //         collection : 'Sessions'
-    //     })
+    //     secret: 'moka',
+    //     // cookie: {maxAge: 30 * 60 * 1000},
+    //     cookie: {
+    //         secure: true,
+    //         maxAge: 30 * 60 * 1000
+    //     },
+    //     store: new redisStore(config.redisStore)
     // }));
-    app.use(session({
-        resave: true,
-        saveUninitialized: true,
-        secret: 'moka',
-        // cookie: {maxAge: 100000},
-        cookie: {
-            secure: true,
-            maxAge: 1000 * 60 * 60
-        },
-        store: new redisStore({
-            host: "127.0.0.1",
-            port: 6379,
-            db: 0,
-            ttl : 1000,
-            prefix:'moka'
-        })
-    }));
 
     app.use(flash());
 
-    app.get("/", function (req, res) {
-        console.info(req.session);
-        if(!req.session.userList){
-            req.session.userList = []
-        }
-        req.session.userList.push({
-            name:'moka'
-        });
+    app.all("*", function (req, res) {
         res.send({status:2})
     });
 

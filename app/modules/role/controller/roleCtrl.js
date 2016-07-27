@@ -8,8 +8,8 @@ var Page = require('../../base/page');
 
 exports.findList = function (req, res) {
     Page(req.body.pageIndex,req.body.pageSize,Role,{},(err,doc) => {
-        if(err) res.send(err);
-        res.send(doc);
+        if(err) res.send({code:500,msg:err});
+        res.send({code:200,doc:doc});
     })
 };
 
@@ -17,23 +17,35 @@ exports.saveEntity = function (req, res) {
     var role = new Role(req.body);
     role.save(req.body).then(
         (doc) =>{
-            res.send(doc);
+            res.send({code:200,doc:doc});
         },
         (err) =>{
             res.statusCode = 500;
-            res.send(err);
+            res.send({code:500,msg:err});
         }
     )
 };
 
 exports.findById = function (req, res) {
-    Role.findById(req.body._id).then(
+    Role.findOne(req.body._id).then(
         (doc) =>{
-            res.send(doc);
+            res.send({code:200,doc:doc});
         },
         (err) =>{
             res.statusCode = 500;
-            res.send(err);
+            res.send({code:500,msg:err});
+        }
+    )
+};
+
+exports.findAll = function (req, res) {
+    Role.find().then(
+        (doc) =>{
+            res.send({code:200,doc:doc});
+        },
+        (err) =>{
+            res.statusCode = 500;
+            res.send({code:500,msg:err});
         }
     )
 };
@@ -41,11 +53,11 @@ exports.findById = function (req, res) {
 exports.findAllAuthById = function (req, res) {
     Role.findAllAuthById(req.body._id).then(
         (doc) =>{
-            res.send(doc);
+            res.send({code:200,doc:doc});
         },
         (err) =>{
             res.statusCode = 500;
-            res.send(err);
+            res.send({code:500,msg:err});
         }
     )
 };

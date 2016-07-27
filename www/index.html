@@ -14,6 +14,21 @@
     <form>
       <label>用户名：<input ng-model="user.user"></label>
       <label>密  码：<input ng-model="user.password"></label>
+      <label>机构：
+        <select ng-model="user.organizeId" ng-options="o.name for o in organizeList">
+          <option value="">-- 请选择 --</option>
+        </select>
+      </label>
+      <label>公司：
+        <select ng-model="user.companyId" ng-options="o.name for o in companyList">
+          <option value="">-- 请选择 --</option>
+        </select>
+      </label>
+      <label>角色：
+        <select ng-model="user.roleId" ng-options="o.name for o in roleList">
+          <option value="">-- 请选择 --</option>
+        </select>
+      </label>
       <button ng-click="save()">用户提交</button>
     </form>
   </div>

@@ -13,11 +13,6 @@ var UserDetailSchema = new Schema({
     update_time: {type: Date, default: new Date()}
 });
 
-
-UserDetailSchema.statics.findById = function (id) {
-    return this.find({'_id':id}).exec();
-};
-
 module.exports = function (db) {
     db.model('UserDetail', UserDetailSchema,'UserDetail');
 };

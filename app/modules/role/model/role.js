@@ -22,10 +22,6 @@ RoleSchema.statics.findAllAuthById = function (id) {
         .populate('authList').exec();
 };
 
-RoleSchema.statics.findById = function (id) {
-    return this.find({_id:id}).exec();
-};
-
 module.exports = function (db) {
     db.model('Role', RoleSchema,'Role');
 };

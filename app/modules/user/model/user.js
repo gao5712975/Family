@@ -42,10 +42,6 @@ var UserSchema = new Schema({
     update_time: {type: Date, default: new Date()}
 });
 
-UserSchema.statics.findById = function (id) {
-    return this.find({_id:id}).exec();
-};
-
 UserSchema.statics.findUsersById = function (id) {
     return this.find({_id:id})
         .populate('userDetailId')

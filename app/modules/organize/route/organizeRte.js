@@ -7,6 +7,7 @@ var organize = require('../controller/organizeCtrl');
 var namespace = '/organize';
 
 module.exports = function (app) {
+    app.get(namespace + "/findAll.htm",organize.findAll);
     app.post(namespace + "/findList.htm",organize.findList);
     app.post(namespace + "/findById.htm",organize.findById);
     app.post(namespace + "/saveEntity.htm",organize.saveEntity);
