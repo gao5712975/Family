@@ -37,4 +37,15 @@ angular.module('userModule',[])
             $scope.roleList = res.doc;
         }
     });
-}]);
+}])
+
+.controller('FileUploadCtrl',['$scope','$http',function ($scope,$http) {
+    var uploader = WebUploader.create({
+        auto:true,
+        server: baseUrl + '/load/profile.htm',
+        pick: '#fileUpload',
+    })
+    uploader.on('uploadSuccess',function(file){
+        console.info(file)
+    })
+}])

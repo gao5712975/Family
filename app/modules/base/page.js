@@ -1,6 +1,7 @@
 /**
  * Created by Yuan on 2016/7/26.
  */
+"use strict";
 var async = require('async');
 /**
  * 分页

@@ -12,7 +12,6 @@ var express = require('express'),
     flash = require('connect-flash'),
     logger = require('morgan'),
     bodyParser = require("body-parser"),
-    multer = require('multer'),
     cookieParser = require("cookie-parser"),
     config = require("./config");
     
@@ -31,7 +30,7 @@ module.exports = function (db) {
 
     //静态文件 // Setting the app router and static folder
     app.use(express.static('public'));
-    // app.use(express.static('www'));
+    app.use(express.static('www'));
 
     //use session
     app.use(session({
@@ -56,13 +55,9 @@ module.exports = function (db) {
 
     app.use(flash());
 
-    app.all("*", function (req, res) {
-        res.send({status:2})
-    });
-
     app.all("*", function (req, res,next) {
         res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Headers', 'X-Request-With,Content-Type');
+        res.header('Access-Control-Allow-Headers', 'X-Request-With,Content-Type,Accept');
         res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
         if (req.method == 'OPTIONS') {
             res.statusCode = 200;
@@ -72,6 +67,9 @@ module.exports = function (db) {
         }
     });
 
+    config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
+        require(path.resolve(modelPath))(app);
+    });
 
     // Globbing model files
     config.getGlobFiles("./app/modules/**/model/*.js").forEach(function (modelPath) {
@@ -86,6 +84,7 @@ module.exports = function (db) {
     //Assume 500 since no middleware responded
     app.use(function (err, req, res, next) {
         if (!err) return next();
+        res.statusCode = 500;
         res.send({
             status:500,
             url:req.originalUrl,
