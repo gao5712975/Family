@@ -13,7 +13,8 @@ var express = require('express'),
     logger = require('morgan'),
     bodyParser = require("body-parser"),
     cookieParser = require("cookie-parser"),
-    config = require("./config");
+    config = require("./config"),
+    favicon = require('serve-favicon');
     
 module.exports = function (db) {
     // Initialize express app
@@ -54,6 +55,8 @@ module.exports = function (db) {
     // }));
 
     app.use(flash());
+
+    app.use(favicon('public/favicon/favicon.ico'));
 
     app.all("*", function (req, res,next) {
         res.header('Access-Control-Allow-Origin', '*');

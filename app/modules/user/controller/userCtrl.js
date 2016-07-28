@@ -82,3 +82,17 @@ exports.removeEntityById = function (req, res) {
         UserDetail.remove({userId:id}).then();
     }
 };
+
+exports.login = function (req, res) {
+    User.find({user:req.body.user,password:req.body.password}).then(
+        (doc) => {
+            if(!doc) res.send({code:404});
+            // console.info(res.getHashes());
+            res.send({code:200,doc:doc})
+        },
+        (err) =>{
+            res.statusCode = 500;
+            res.send({code:500,msg:err});
+        }
+    )
+};
