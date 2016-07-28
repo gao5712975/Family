@@ -50,5 +50,11 @@
     <input type="submit" value="上传">
   </form>
 </div>
+
+<div ng-controller="LoginCtrl">
+  <label>用户名：<input type="text" ng-model="user.user"></label>
+  <label>密码：<input type="password" ng-model="user.password"></label>
+  <button ng-click="login()"> 登录 </button>
+</div>
 </body>
 </html>

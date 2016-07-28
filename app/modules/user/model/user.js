@@ -43,7 +43,7 @@ var UserSchema = new Schema({
 });
 
 UserSchema.statics.findUsersById = function (id) {
-    return this.find({_id:id})
+    return this.findOne({_id:id})
         .populate('userDetailId')
         .populate('organizeId')
         .populate('companyId')

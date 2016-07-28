@@ -8,6 +8,7 @@ var namespace = '/user';
 
 module.exports = function (app) {
     app.post(namespace + "/login.htm",User.login);
+    app.post(namespace + "/loginOut.htm",User.loginOut);
     app.post(namespace + "/findList.htm",User.findList);
     app.post(namespace + "/findById.htm",User.findById);
     app.post(namespace + "/findUsersById.htm",User.findUsersById);

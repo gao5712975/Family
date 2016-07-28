@@ -13,13 +13,14 @@ var express = require('express'),
     logger = require('morgan'),
     bodyParser = require("body-parser"),
     cookieParser = require("cookie-parser"),
+    cors = require('cors'),
     config = require("./config"),
     favicon = require('serve-favicon');
     
 module.exports = function (db) {
     // Initialize express app
     var app = express();
-
+    app.use(cors());
     app.set('showStackError', false);
     
     app.use(logger('dev'));
@@ -57,8 +58,18 @@ module.exports = function (db) {
     app.use(flash());
 
     app.use(favicon('public/favicon/favicon.ico'));
+    app.all('*',function (req, res, next) {
+        let url = req.originalUrl;
+        if(url == '/user/login.htm'){
+            if(req.session.userSession){
+                res.send({code:200})
+            }
+            console.info(req.get('express-token-key'));
+        }
+        next();
+    });
 
-    app.all("*", function (req, res,next) {
+/*    app.all("*", function (req, res,next) {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'X-Request-With,Content-Type,Accept');
         res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
@@ -68,7 +79,7 @@ module.exports = function (db) {
         } else {
             next();
         }
-    });
+    });*/
 
     config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);

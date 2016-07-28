@@ -49,3 +49,13 @@ angular.module('userModule',[])
         console.info(file)
     })
 }])
+
+.controller('LoginCtrl',['$scope','$http',function ($scope,$http) {
+    $scope.user = {}
+    $scope.login = function () {
+        $http.post(baseUrl + '/user/login.htm/',$scope.user).success(function (res) {
+            console.info(res)
+        })
+    }
+}])
+

@@ -123,6 +123,7 @@
 2.Bluebird
 3.TokuMX
 4.koajs
+5.hiredis 
 
 #ubuntu 安装mongodb
     开机自启动

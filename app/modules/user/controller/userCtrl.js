@@ -2,10 +2,11 @@
  * Created by Yuan on 2016/7/17.
  */
 'use strict';
-var mongoose = require("mongoose");
-var User = mongoose.model('User');
-var UserDetail = mongoose.model('UserDetail');
-var Page = require('../../base/page');
+let mongoose = require("mongoose");
+let User = mongoose.model('User');
+let UserDetail = mongoose.model('UserDetail');
+var Role = mongoose.model('Role');
+let Page = require('../../base/page');
 
 exports.findList = function (req, res) {
     Page(req.body.pageIndex,req.body.pageSize,User,{},(err,doc) => {
@@ -39,20 +40,28 @@ exports.findUsersById = function (req, res) {
 };
 
 exports.saveEntity = function (req, res) {
-    var _id = new mongoose.Types.ObjectId;
-    req.body.userDetailId = _id;
-    var user = new User(req.body);
-    user.save().then(
-        (doc) =>{
-            var userDetails = new UserDetail({_id:_id,userId:doc._id});
-            userDetails.save().then();
-            res.send({code:200,doc:doc});
-        },
-        (err) =>{
-            res.statusCode = 500;
-            res.send({code:500,msg:err});
+    User.find({user:req.body.user}).then(
+        (doc) => {
+            if(doc) res.send({code:500,doc:doc});
+            addUser();
         }
     );
+    function addUser() {
+        let _id = new mongoose.Types.ObjectId;
+        req.body.userDetailId = _id;
+        let user = new User(req.body);
+        user.save().then(
+            (doc) =>{
+                let userDetails = new UserDetail({_id:_id,userId:doc._id});
+                userDetails.save().then();
+                res.send({code:200,doc:doc});
+            },
+            (err) =>{
+                res.statusCode = 500;
+                res.send({code:500,msg:err});
+            }
+        );
+    }
 };
 
 exports.updatePassword = function (req, res) {
@@ -84,15 +93,32 @@ exports.removeEntityById = function (req, res) {
 };
 
 exports.login = function (req, res) {
-    User.find({user:req.body.user,password:req.body.password}).then(
+    User.findOne({user:req.body.user,password:req.body.password}).then(
         (doc) => {
             if(!doc) res.send({code:404});
-            // console.info(res.getHashes());
-            res.send({code:200,doc:doc})
+            res.set('express-token-key',doc._id);
+            let $user = User.findUsersById({_id:doc._id});
+            let $role = Role.findAllAuthById({_id:doc.roleId});
+            Promise.all([$user,$role]).then(
+                (arr) => {
+                    req.session.userSession = {
+                        user:arr[0],
+                        authList:arr[1]
+                    };
+                    res.send({code:200,doc:doc});
+                }
+            );
         },
         (err) =>{
             res.statusCode = 500;
             res.send({code:500,msg:err});
         }
     )
+};
+
+exports.loginOut = function (req, res) {
+    if(req.session.userSession){
+        delete req.session.userSession;
+    }
+    res.send({code:200});
 };

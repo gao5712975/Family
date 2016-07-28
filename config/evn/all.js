@@ -4,13 +4,14 @@
 "use strict";
 
 module.exports = {
+    url:'mongodb://127.0.0.1/moka',
     port: 3000,
     bodyParser: {
         json: {limit: '150kb'},
         urlencoded: {extended: true}
     },
     mongoStore:{
-        url:'mongodb://127.0.0.1/moka',
+        url:'mongodb://127.0.0.1/session',
         collection:'Sessions'
     },
     redisStore:{

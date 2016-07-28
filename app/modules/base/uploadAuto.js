@@ -3,12 +3,13 @@
  */
 "use strict";
 var multer = require('multer');
+var uuid = require('uuid');
 var fs = require('fs');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         var _date = new Date();
-        var _path = 'uploads/' + _date.getFullYear() + '/' + _date.getMonth() + '/' + _date.getDate();
+        var _path = `uploads/${_date.getFullYear()}/${_date.getMonth()}/${_date.getDate()}`;
         var _array = _path.split('/');
         
         var _p = '';
@@ -20,7 +21,7 @@ var storage = multer.diskStorage({
         
     },
     filename: function (req, file, cb) {
-        file.filename = new Date().getTime() + '-' + file.originalname;
+        file.filename = uuid.v4() + '-' + file.originalname;
         cb(null, file.filename)
     }
 });
