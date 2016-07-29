@@ -15,10 +15,10 @@ var express = require('express'),
     cookieParser = require("cookie-parser"),
     cors = require('cors'),
     config = require("./config"),
-    favicon = require('serve-favicon');
+    favicon = require('serve-favicon'),
+    Redis = require('../app/modules/base/redis');
     
 module.exports = function (db) {
-    // Initialize express app
     var app = express();
     app.use(cors());
     app.set('showStackError', false);
@@ -43,30 +43,42 @@ module.exports = function (db) {
         proxy:true,
         store: new mongoStore(config.mongoStore)
     }));
-    // app.use(session({
-    //     resave: true,
-    //     saveUninitialized: true,
-    //     secret: 'moka',
-    //     // cookie: {maxAge: 30 * 60 * 1000},
-    //     cookie: {
-    //         secure: true,
-    //         maxAge: 30 * 60 * 1000
-    //     },
-    //     store: new redisStore(config.redisStore)
-    // }));
+    app.use(session({
+        resave: true,
+        saveUninitialized: true,
+        secret: 'moka',
+        // cookie: {maxAge: 30 * 60 * 1000},
+        cookie: {
+            secure: true,
+            maxAge: 30 * 60 * 1000
+        },
+        store: new redisStore(config.redisStore)
+    }));
 
     app.use(flash());
 
     app.use(favicon('public/favicon/favicon.ico'));
+    
     app.all('*',function (req, res, next) {
         let url = req.originalUrl;
-        if(url == '/user/login.htm'){
-            if(req.session.userSession){
-                res.send({code:200})
+        let token = req.get('express-token-key');
+        console.info(token);
+        if(url == '/user/login.htm' || url == '/user/login.htm/'){
+            if(req.session){
+                if(req.session.userSession) res.send({code:200});
+                    next();
+            }else{
+                Redis((client) => {
+                    client.get(`${token}`,(err,doc) => {
+                        client.quit();
+                        if(doc) res.send({code:200});
+                        next();
+                    })
+                });
             }
-            console.info(req.get('express-token-key'));
+        }else{
+            next();
         }
-        next();
     });
 
 /*    app.all("*", function (req, res,next) {

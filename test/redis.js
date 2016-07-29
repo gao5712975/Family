@@ -1,6 +1,7 @@
 /**
  * Created by Yuan on 2016/7/21.
  */
+/*
 var redis = require("redis");
 var client = redis.createClient();
 
@@ -12,4 +13,31 @@ client.get("foo_rand000000000000", function (err, reply) {
     console.log(reply);
 });
 
-client.quit();
+client.quit();*/
+
+var redis = require('redis')
+    , client = redis.createClient();
+
+client.on('error', function (err) {
+    console.log('Error ' + err);
+});
+
+// Set a value with an expiration
+client.set('string key', 'Hello World', redis.print);
+// Expire in 3 seconds
+client.expire('string key', 3);
+
+// This timer is only to demo the TTL
+// Runs every second until the timeout
+// occurs on the value
+var myTimer = setInterval(function() {
+    client.get('string key', function (err, reply) {
+        if(reply) {
+            console.log('I live: ' + reply.toString());
+        } else {
+            clearTimeout(myTimer);
+            console.log('I expired');
+            client.quit();
+        }
+    });
+}, 1000);

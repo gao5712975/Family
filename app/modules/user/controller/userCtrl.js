@@ -7,6 +7,8 @@ let User = mongoose.model('User');
 let UserDetail = mongoose.model('UserDetail');
 var Role = mongoose.model('Role');
 let Page = require('../../base/page');
+let Redis = require('../../base/redis');
+let Config = require('../../../config/config');
 
 exports.findList = function (req, res) {
     Page(req.body.pageIndex,req.body.pageSize,User,{},(err,doc) => {
@@ -96,16 +98,26 @@ exports.login = function (req, res) {
     User.findOne({user:req.body.user,password:req.body.password}).then(
         (doc) => {
             if(!doc) res.send({code:404});
-            res.set('express-token-key',doc._id);
+                res.set('express-token-key',doc._id);
             let $user = User.findUsersById({_id:doc._id});
             let $role = Role.findAllAuthById({_id:doc.roleId});
             Promise.all([$user,$role]).then(
                 (arr) => {
-                    req.session.userSession = {
-                        user:arr[0],
-                        authList:arr[1]
-                    };
-                    res.send({code:200,doc:doc});
+                    var _session = {user:arr[0], authList:arr[1]};
+                    /**
+                     * 如果有session管理登陆 否则用redis保存用户登陆信息
+                     */
+                    if(req.session){
+                        req.session.userSession = _session;
+                        res.send({code:200,doc:doc});
+                    }else{
+                        Redis( (client) => {
+                            client.set(`${doc._id}`,JSON.stringify(_session));
+                            client.expire(`${doc._id}`, Config.sessionTtl);
+                            client.quit();
+                            res.send({code:200,doc:doc});
+                        });
+                    }
                 }
             );
         },
@@ -117,8 +129,10 @@ exports.login = function (req, res) {
 };
 
 exports.loginOut = function (req, res) {
-    if(req.session.userSession){
+    if(req.session && req.session.userSession){
         delete req.session.userSession;
+    }else{
+        
     }
     res.send({code:200});
 };
