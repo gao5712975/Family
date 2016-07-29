@@ -129,10 +129,15 @@ exports.login = function (req, res) {
 };
 
 exports.loginOut = function (req, res) {
-    if(req.session && req.session.userSession){
-        delete req.session.userSession;
+    if(req.session){
+        req.session.destroy();
+        res.send({code:200});
     }else{
-        
+        let token = req.get('express-token-key');
+        Redis( (client) => {
+            client.expire(`${token}`, 0);
+            client.quit();
+            res.send({code:200});
+        });
     }
-    res.send({code:200});
 };

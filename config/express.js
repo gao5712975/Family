@@ -35,25 +35,25 @@ module.exports = function (db) {
     app.use(express.static('www'));
 
     //use session
-    app.use(session({
-        secret: 'moka',
-        resave: true,
-        cookie: {maxAge: 30 * 60 * 1000},
-        saveUninitialized: true,
-        proxy:true,
-        store: new mongoStore(config.mongoStore)
-    }));
-    app.use(session({
-        resave: true,
-        saveUninitialized: true,
-        secret: 'moka',
-        // cookie: {maxAge: 30 * 60 * 1000},
-        cookie: {
-            secure: true,
-            maxAge: 30 * 60 * 1000
-        },
-        store: new redisStore(config.redisStore)
-    }));
+    // app.use(session({
+    //     secret: 'moka',
+    //     resave: true,
+    //     cookie: {maxAge: 30 * 60 * 1000},
+    //     saveUninitialized: true,
+    //     proxy:true,
+    //     store: new mongoStore(config.mongoStore)
+    // }));
+    // app.use(session({
+    //     resave: true,
+    //     saveUninitialized: true,
+    //     secret: 'moka',
+    //     // cookie: {maxAge: 30 * 60 * 1000},
+    //     cookie: {
+    //         secure: true,
+    //         maxAge: 30 * 60 * 1000
+    //     },
+    //     store: new redisStore(config.redisStore)
+    // }));
 
     app.use(flash());
 
@@ -62,36 +62,42 @@ module.exports = function (db) {
     app.all('*',function (req, res, next) {
         let url = req.originalUrl;
         let token = req.get('express-token-key');
-        console.info(token);
-        if(url == '/user/login.htm' || url == '/user/login.htm/'){
+        if(config.whiteUrlList.indexOf(url) != -1){
             if(req.session){
-                if(req.session.userSession) res.send({code:200});
+                if(req.session.userSession)
+                    res.send({code:200});
+                else
                     next();
             }else{
                 Redis((client) => {
                     client.get(`${token}`,(err,doc) => {
                         client.quit();
-                        if(doc) res.send({code:200});
-                        next();
+                        if(doc)
+                            res.send({code:200});
+                        else
+                            next();
                     })
                 });
             }
         }else{
-            next();
+            if(req.session){
+                if(req.session.userSession)
+                    next();
+                else
+                    res.send({code:403});
+            }else{
+                Redis((client) => {
+                    client.get(`${token}`,(err,doc) => {
+                        client.quit();
+                        if(doc)
+                            next();
+                        else
+                            res.send({code:403});
+                    })
+                });
+            }
         }
     });
-
-/*    app.all("*", function (req, res,next) {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Headers', 'X-Request-With,Content-Type,Accept');
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-        if (req.method == 'OPTIONS') {
-            res.statusCode = 200;
-            res.send('OPTIONS');
-        } else {
-            next();
-        }
-    });*/
 
     config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);

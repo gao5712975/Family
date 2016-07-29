@@ -20,5 +20,9 @@ module.exports = {
         db: 0,
         ttl : 1000,
         prefix:'moka'
-    }
+    },
+    whiteUrlList:[
+        '/user/login.htm',
+        '/user/login.htm/'
+    ]
 };

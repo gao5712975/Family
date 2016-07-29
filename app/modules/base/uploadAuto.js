@@ -36,7 +36,7 @@ var upload = multer({
 });
 
 module.exports = function (app) {
-    app.post('/load/profile.htm', upload.any(), function (req, res, next) {
+    app.post('/load/profile.htm', upload.any(), function (req, res) {
         res.send({code: 200, doc: req.files})
     })
 };
