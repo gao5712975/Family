@@ -15,6 +15,7 @@ var express = require('express'),
     cookieParser = require("cookie-parser"),
     cors = require('cors'),
     config = require("./config"),
+    Config = require("../app/config/config"),
     favicon = require('serve-favicon'),
     Redis = require('../app/modules/base/redis');
     
@@ -33,24 +34,27 @@ module.exports = function (db) {
     //静态文件 // Setting the app router and static folder
     app.use(express.static('public'));
     app.use(express.static('www'));
-
     //use session
     // app.use(session({
     //     secret: 'moka',
     //     resave: true,
-    //     cookie: {maxAge: 30 * 60 * 1000},
+    //     cookie: {
+    //         secure:'auto',
+    //         httpOnly:true,
+    //         maxAge:20 * 1000
+    //     },
     //     saveUninitialized: true,
     //     proxy:true,
     //     store: new mongoStore(config.mongoStore)
     // }));
     // app.use(session({
+    //     secret: 'moka',
     //     resave: true,
     //     saveUninitialized: true,
-    //     secret: 'moka',
-    //     // cookie: {maxAge: 30 * 60 * 1000},
     //     cookie: {
-    //         secure: true,
-    //         maxAge: 30 * 60 * 1000
+    //         secure:'auto',
+    //         httpOnly:true,
+    //         maxAge:20 * 1000
     //     },
     //     store: new redisStore(config.redisStore)
     // }));
@@ -64,35 +68,48 @@ module.exports = function (db) {
         let token = req.get('express-token-key');
         if(config.whiteUrlList.indexOf(url) != -1){
             if(req.session){
-                if(req.session.userSession)
+                if(req.session.userSession){
+                    console.info(req.session.cookie.maxAge);
+                    req.session.cookie.expires = new Date(Date.now() + 5 * 1000);
+                    req.session.cookie.maxAge = 5 * 1000;
+                    req.session.save();
                     res.send({code:200});
-                else
+                } else{
                     next();
+                }
             }else{
                 Redis((client) => {
                     client.get(`${token}`,(err,doc) => {
-                        client.quit();
-                        if(doc)
+                        if(doc){
+                            client.expire(`${token}`, Config.sessionTtl);
+                            client.quit();
                             res.send({code:200});
-                        else
+                        }else{
                             next();
+                        }
                     })
                 });
             }
         }else{
             if(req.session){
-                if(req.session.userSession)
+                if(req.session.userSession){
+                    req.session.cookie.expires = new Date(Date.now() + 5 * 1000);
+                    req.session.cookie.maxAge = 5 * 1000;
+                    req.session.save();
                     next();
-                else
+                }else{
                     res.send({code:403});
+                }
             }else{
                 Redis((client) => {
                     client.get(`${token}`,(err,doc) => {
-                        client.quit();
-                        if(doc)
+                        if(doc) {
+                            client.expire(`${token}`, Config.sessionTtl);
+                            client.quit();
                             next();
-                        else
+                        } else{
                             res.send({code:403});
+                        }
                     })
                 });
             }

@@ -81,8 +81,8 @@ exports.updatePassword = function (req, res) {
 exports.removeEntityById = function (req, res) {
     User.remove({_id:req.body._id}).then(
         (doc) =>{
-            res.send({code:200,doc:doc});
             removeUserDetail(req.body._id);
+            res.send({code:200,doc:doc});
         },
         (err) =>{
             res.statusCode = 500;
@@ -109,6 +109,9 @@ exports.login = function (req, res) {
                      */
                     if(req.session){
                         req.session.userSession = _session;
+                        req.session.cookie.expires = new Date(Date.now() + 5 * 1000);
+                        req.session.cookie.maxAge = 5 * 1000;
+                        req.session.save();
                         res.send({code:200,doc:doc});
                     }else{
                         Redis( (client) => {
@@ -135,7 +138,7 @@ exports.loginOut = function (req, res) {
     }else{
         let token = req.get('express-token-key');
         Redis( (client) => {
-            client.expire(`${token}`, 0);
+            client.del(`${token}`);
             client.quit();
             res.send({code:200});
         });

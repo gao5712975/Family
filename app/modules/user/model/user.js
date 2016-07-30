@@ -12,7 +12,7 @@ var UserSchema = new Schema({
     },
     password: {
         type:String,
-        required:[true, '请填写用户名']
+        required:[true, '请填写密码']
     },
     userDetailId:{
         type:Schema.Types.ObjectId,
