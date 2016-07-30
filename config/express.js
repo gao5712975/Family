@@ -67,52 +67,29 @@ module.exports = function (db) {
         let url = req.originalUrl;
         let token = req.get('express-token-key');
         if(config.whiteUrlList.indexOf(url) != -1){
-            if(req.session){
-                if(req.session.userSession){
-                    console.info(req.session.cookie.maxAge);
-                    req.session.cookie.expires = new Date(Date.now() + 5 * 1000);
-                    req.session.cookie.maxAge = 5 * 1000;
-                    req.session.save();
-                    res.send({code:200});
-                } else{
-                    next();
-                }
-            }else{
-                Redis((client) => {
-                    client.get(`${token}`,(err,doc) => {
-                        if(doc){
-                            client.expire(`${token}`, Config.sessionTtl);
-                            client.quit();
-                            res.send({code:200});
-                        }else{
-                            next();
-                        }
-                    })
-                });
-            }
+            Redis((client) => {
+                client.get(`${token}`,(err,doc) => {
+                    if(doc){
+                        client.expire(`${token}`, Config.sessionTtl);
+                        client.quit();
+                        res.send({code:200});
+                    }else{
+                        next();
+                    }
+                })
+            });
         }else{
-            if(req.session){
-                if(req.session.userSession){
-                    req.session.cookie.expires = new Date(Date.now() + 5 * 1000);
-                    req.session.cookie.maxAge = 5 * 1000;
-                    req.session.save();
-                    next();
-                }else{
-                    res.send({code:403});
-                }
-            }else{
-                Redis((client) => {
-                    client.get(`${token}`,(err,doc) => {
-                        if(doc) {
-                            client.expire(`${token}`, Config.sessionTtl);
-                            client.quit();
-                            next();
-                        } else{
-                            res.send({code:403});
-                        }
-                    })
-                });
-            }
+            Redis((client) => {
+                client.get(`${token}`,(err,doc) => {
+                    if(doc) {
+                        client.expire(`${token}`, Config.sessionTtl);
+                        client.quit();
+                        next();
+                    } else{
+                        res.send({code:403});
+                    }
+                })
+            });
         }
     });
 

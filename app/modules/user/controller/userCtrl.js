@@ -97,23 +97,15 @@ exports.removeEntityById = function (req, res) {
 exports.login = function (req, res) {
     User.findOne({user:req.body.user,password:req.body.password}).then(
         (doc) => {
-            if(!doc) res.send({code:404});
+            if(!doc){
+                res.send({code:404});
+            } else{
                 res.set('express-token-key',doc._id);
-            let $user = User.findUsersById({_id:doc._id});
-            let $role = Role.findAllAuthById({_id:doc.roleId});
-            Promise.all([$user,$role]).then(
-                (arr) => {
-                    var _session = {user:arr[0], authList:arr[1]};
-                    /**
-                     * 如果有session管理登陆 否则用redis保存用户登陆信息
-                     */
-                    if(req.session){
-                        req.session.userSession = _session;
-                        req.session.cookie.expires = new Date(Date.now() + 5 * 1000);
-                        req.session.cookie.maxAge = 5 * 1000;
-                        req.session.save();
-                        res.send({code:200,doc:doc});
-                    }else{
+                let $user = User.findUsersById({_id:doc._id});
+                let $role = Role.findAllAuthById({_id:doc.roleId});
+                Promise.all([$user,$role]).then(
+                    (arr) => {
+                        var _session = {user:arr[0], authList:arr[1]};
                         Redis( (client) => {
                             client.set(`${doc._id}`,JSON.stringify(_session));
                             client.expire(`${doc._id}`, Config.sessionTtl);
@@ -121,8 +113,8 @@ exports.login = function (req, res) {
                             res.send({code:200,doc:doc});
                         });
                     }
-                }
-            );
+                );
+            }
         },
         (err) =>{
             res.statusCode = 500;
