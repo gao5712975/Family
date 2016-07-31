@@ -9,11 +9,14 @@ var Role = mongoose.model('Role');
 let Page = require('../../base/page');
 let Redis = require('../../base/redis');
 let Config = require('../../../config/config');
+let crypto = require('crypto');
 
 exports.findList = function (req, res) {
     Page(req.body.pageIndex,req.body.pageSize,User,{},(err,doc) => {
-        if(err) res.send({code:500,msg:err});
-        res.send({code:200,doc:doc});
+        if (err)
+            res.send({code: 500, msg: err});
+        else
+            res.send({code: 200, doc: doc});
     })
 };
 
@@ -100,17 +103,19 @@ exports.login = function (req, res) {
             if(!doc){
                 res.send({code:404});
             } else{
-                res.set('express-token-key',doc._id);
+                let md5 = crypto.createHash('md5');
+                var sessionId = md5.update(`${doc._id}`).digest('hex');
+                res.set(Config.tokenHeaders,sessionId);
                 let $user = User.findUsersById({_id:doc._id});
                 let $role = Role.findAllAuthById({_id:doc.roleId});
                 Promise.all([$user,$role]).then(
                     (arr) => {
                         var _session = {user:arr[0], authList:arr[1]};
                         Redis( (client) => {
-                            client.set(`${doc._id}`,JSON.stringify(_session));
-                            client.expire(`${doc._id}`, Config.sessionTtl);
+                            client.set(`${sessionId}`,JSON.stringify(_session));
+                            client.expire(`${sessionId}`, Config.sessionTtl);
                             client.quit();
-                            res.send({code:200,doc:doc});
+                            res.send({code:200,doc:doc,token:sessionId});
                         });
                     }
                 );

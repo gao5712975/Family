@@ -54,7 +54,9 @@ angular.module('userModule',[])
     $scope.user = {user:'admin',password:'666666'}
     $scope.login = function () {
         $http.post(baseUrl + '/user/login.htm/',$scope.user).success(function (res) {
-            console.info(res)
+            if(res && res.code == 200){
+                window.sessionStorage.setItem('token',res.doc._id);
+            }
         })
     }
 }])

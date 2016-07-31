@@ -5,7 +5,7 @@
 
 module.exports = {
     url:'mongodb://127.0.0.1/moka',
-    port: 3000,
+    port: 80,
     bodyParser: {
         json: {limit: '150kb'},
         urlencoded: {extended: true}
@@ -23,6 +23,7 @@ module.exports = {
     },
     whiteUrlList:[
         '/user/login.htm',
-        '/user/login.htm/'
+        '/user/login.htm/',
+        '/'
     ]
 };

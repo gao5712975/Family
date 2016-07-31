@@ -4,12 +4,12 @@
 "use strict";
 var express = require('express'),
     path = require("path"),
-    nwPath = process.execPath,
-    nwDir = path.dirname(nwPath),
-    session = require("express-session"),
-    mongoStore = require('connect-mongo')(session),
-    redisStore = require('connect-redis')(session),
-    flash = require('connect-flash'),
+    // nwPath = process.execPath,
+    // nwDir = path.dirname(nwPath),
+    // session = require("express-session"),
+    // mongoStore = require('connect-mongo')(session),
+    // redisStore = require('connect-redis')(session),
+    // flash = require('connect-flash'),
     logger = require('morgan'),
     bodyParser = require("body-parser"),
     cookieParser = require("cookie-parser"),
@@ -33,39 +33,21 @@ module.exports = function (db) {
 
     //静态文件 // Setting the app router and static folder
     app.use(express.static('public'));
-    app.use(express.static('www'));
-    //use session
-    // app.use(session({
-    //     secret: 'moka',
-    //     resave: true,
-    //     cookie: {
-    //         secure:'auto',
-    //         httpOnly:true,
-    //         maxAge:20 * 1000
-    //     },
-    //     saveUninitialized: true,
-    //     proxy:true,
-    //     store: new mongoStore(config.mongoStore)
-    // }));
-    // app.use(session({
-    //     secret: 'moka',
-    //     resave: true,
-    //     saveUninitialized: true,
-    //     cookie: {
-    //         secure:'auto',
-    //         httpOnly:true,
-    //         maxAge:20 * 1000
-    //     },
-    //     store: new redisStore(config.redisStore)
-    // }));
+    // app.use(express.static('www'));
 
-    app.use(flash());
+    // app.use(flash());
 
     app.use(favicon('public/favicon/favicon.ico'));
-    
+
     app.all('*',function (req, res, next) {
-        let url = req.originalUrl;
-        let token = req.get('express-token-key');
+        let url = '/';
+        if(req.originalUrl){
+            url = req.originalUrl;
+            if(/^.*[/?].*$/.test(url)){
+                url = req.originalUrl.split("?")[0];
+            }
+        }
+        let token = req.get(Config.tokenHeaders);
         if(config.whiteUrlList.indexOf(url) != -1){
             Redis((client) => {
                 client.get(`${token}`,(err,doc) => {

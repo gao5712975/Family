@@ -29,7 +29,7 @@ module.exports = function (page, pageSize, Model, options, callback) {
             });
         },
         records: function (done) {   // 查询一页的记录
-            Model.find(queryParams).skip(start).limit(pageSize).populate(populate).sort(sortParams).exec(function (err, doc) {
+            Model.find(queryParams).skip(+start).limit(+pageSize).populate(populate).sort(sortParams).exec(function (err, doc) {
                 done(err, doc);
             });
         }

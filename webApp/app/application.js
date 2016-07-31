@@ -23,6 +23,24 @@ var ApplicationConfig = (function () {
 
 var App = angular.module(ApplicationConfig.moduleName, ApplicationConfig.moduleDependencies);
 
+
+App.config(['$httpProvider',function ($httpProvider) {
+    $httpProvider.interceptors.push('HttpInterceptor')
+}])
+
+App.factory('HttpInterceptor',['$window',function ($window) {
+    return {
+        request:function (config) {
+            var _token = $window.sessionStorage.getItem('token');
+            console.info(_token);
+            if(_token){
+                config.headers['express-token-key'] = _token
+            }
+            return config;
+        }
+    }
+}]);
+
 function toQueryPair(key, value) {
     if (typeof value == 'undefined') {
         return key;
@@ -68,4 +86,4 @@ var configJson = {
     }
 };
 
-var baseUrl = '//127.0.0.1:3000';
+var baseUrl = '//127.0.0.1:80';

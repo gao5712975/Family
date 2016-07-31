@@ -2,17 +2,24 @@
  * Created by Yuan on 2016/7/17.
  */
 "use strict";
-var User = require("../controller/userCtrl");
+let express = require('express');
+let User = require("../controller/userCtrl");
 
-var namespace = '/user';
+let namespace = '/user';
 
 module.exports = function (app) {
-    app.post(namespace + "/login.htm",User.login);
-    app.get(namespace + "/loginOut.htm",User.loginOut);
-    app.post(namespace + "/findList.htm",User.findList);
-    app.post(namespace + "/findById.htm",User.findById);
-    app.post(namespace + "/findUsersById.htm",User.findUsersById);
-    app.post(namespace + "/updatePassword.htm",User.updatePassword);
-    app.post(namespace + "/saveEntity.htm",User.saveEntity);
-    app.post(namespace + "/removeEntityById.htm",User.removeEntityById);
+    let route = express.Router();
+    route.all("*",function (req, res, next) {
+        console.info("user");
+        next();
+    });
+    route.post(namespace + "/login.htm",User.login);
+    route.get(namespace + "/loginOut.htm",User.loginOut);
+    route.post(namespace + "/findList.htm",User.findList);
+    route.post(namespace + "/findById.htm",User.findById);
+    route.post(namespace + "/findUsersById.htm",User.findUsersById);
+    route.post(namespace + "/updatePassword.htm",User.updatePassword);
+    route.post(namespace + "/saveEntity.htm",User.saveEntity);
+    route.post(namespace + "/removeEntityById.htm",User.removeEntityById);
+    app.use(route);
 };
