@@ -9,10 +9,6 @@ let namespace = '/user';
 
 module.exports = function (app) {
     let route = express.Router();
-    route.all("*",function (req, res, next) {
-        console.info("user");
-        next();
-    });
     route.post(namespace + "/login.htm",User.login);
     route.get(namespace + "/loginOut.htm",User.loginOut);
     route.post(namespace + "/findList.htm",User.findList);

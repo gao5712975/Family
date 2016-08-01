@@ -43,8 +43,13 @@ module.exports = function (db) {
         let url = '/';
         if(req.originalUrl){
             url = req.originalUrl;
-            if(/^.*[/?].*$/.test(url)){
+            if(/^.*(\/\?).*$/.test(url)){
                 url = req.originalUrl.split("?")[0];
+            }else{
+                let _urlLeg = req.originalUrl.length;
+                if(req.originalUrl.lastIndexOf('/') == _urlLeg - 1){
+                    url = req.originalUrl.substr(0,_urlLeg-1)
+                }
             }
         }
         let token = req.get(Config.tokenHeaders);

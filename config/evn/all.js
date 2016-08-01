@@ -23,7 +23,6 @@ module.exports = {
     },
     whiteUrlList:[
         '/user/login.htm',
-        '/user/login.htm/',
         '/'
     ]
 };

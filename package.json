@@ -1,6 +1,9 @@
 {
   "name": "Family",
   "version": "0.0.1",
+  "scripts": {
+    "start": "sudo gulp"
+  },
   "devDependencies": {
     "del": "^2.2.1",
     "gulp": "^3.9.1",
