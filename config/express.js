@@ -41,8 +41,9 @@ module.exports = function (db) {
 
     app.all('*',function (req, res, next) {
         let url = '/';
-        if(req.originalUrl){
+        if(req.originalUrl && req.originalUrl != url){
             url = req.originalUrl;
+            console.info(url);
             if(/^.*(\/\?).*$/.test(url)){
                 url = req.originalUrl.split("?")[0];
             }else{
@@ -78,6 +79,11 @@ module.exports = function (db) {
                 })
             });
         }
+    });
+
+    //weixin
+    config.getGlobFiles("./app/business/weixin/weixinRoute.js").forEach(function (modelPath) {
+        require(path.resolve(modelPath))(app);
     });
 
     config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
