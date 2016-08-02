@@ -10,6 +10,8 @@ module.exports = function (app) {
     let route = express.Router();
     //接口验证
     route.get('/',weixinCtrl.portVerified);
+    //消息转接
+    route.post('/',weixinCtrl.forwardNews);
 
     app.use(route)
 };
