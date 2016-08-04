@@ -37,7 +37,7 @@ function getAccessToken(done) {
                 config.access_token = JSON.parse(data).access_token;
             }
         });
-    },60*1000*200);
+    },60*1000*20);
 }();
 
 //接口验证
@@ -61,6 +61,17 @@ exports.portVerified = function (req, res) {
     }
 };
 
+//消息回复类型
+let switchMasType = {
+    text:msgTypeText,
+    image:msgTypeImage,
+    voice:msgTypeVoice,
+    shortvideo:msgTypeVideo,
+    video:msgTypeVideo,
+    music:'',
+    news:''
+};
+
 exports.forwardNews = function (req, res) {
     let xml = '';
     req.on('data',(data) => {
@@ -69,15 +80,71 @@ exports.forwardNews = function (req, res) {
     req.once('end',() => {
         console.info(xml);
         xml2js.parseString(xml,{explicitArray:false},(err,result) => {
-            console.info(JSON.stringify(result));
-            let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:false,headless:true});
-            let FromUserName = result.xml.FromUserName;
-            result.xml.FromUserName = result.xml.ToUserName;
-            result.xml.ToUserName = FromUserName;
-            let xmlBuffer = builder.buildObject(result.xml);
-            console.info(xmlBuffer);
-            res.send(xmlBuffer);
+            if(err){
+                res.send({code:500,msg:err})
+            } else{
+                console.info(result);
+                let msgType = (typeof switchMasType[result.xml.MsgType] == 'function') && switchMasType[result.xml.MsgType](result,function (data) {
+                    console.info(data);
+                    res.send(data);
+                });
+                console.info(msgType);
+                if(!msgType){
+                    res.send('success');
+                }
+            }
         })
     });
 };
 
+function msgTypeText(result,done) {
+    let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
+    let FromUserName = result.xml.FromUserName;
+    result.xml.FromUserName = result.xml.ToUserName;
+    result.xml.ToUserName = FromUserName;
+    let xmlBuffer = builder.buildObject(result.xml);
+    done && done(xmlBuffer);
+    return true;
+}
+
+function msgTypeImage(result,done) {
+    let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
+    let FromUserName = result.xml.FromUserName;
+    result.xml.FromUserName = result.xml.ToUserName;
+    result.xml.ToUserName = FromUserName;
+    result.xml.Image = {
+        MediaId:result.xml.MediaId
+    };
+    let xmlBuffer = builder.buildObject(result.xml);
+    done && done(xmlBuffer);
+    return true;
+}
+
+function msgTypeVoice(result,done) {
+    let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
+    let FromUserName = result.xml.FromUserName;
+    result.xml.FromUserName = result.xml.ToUserName;
+    result.xml.ToUserName = FromUserName;
+    result.xml.Voice = {
+        MediaId:result.xml.MediaId
+    };
+    let xmlBuffer = builder.buildObject(result.xml);
+    done && done(xmlBuffer);
+    return true;
+}
+
+function msgTypeVideo(result,done) {
+    let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
+    let FromUserName = result.xml.FromUserName;
+    result.xml.FromUserName = result.xml.ToUserName;
+    result.xml.ToUserName = FromUserName;
+    result.xml.MsgType = 'video';
+    result.xml.Video = {
+        MediaId:result.xml.MediaId,
+        Title:'测试',
+        Description:'测试测试测试，重要的事情需要说三遍'
+    };
+    let xmlBuffer = builder.buildObject(result.xml);
+    done && done(xmlBuffer);
+    return true;
+}
