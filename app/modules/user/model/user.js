@@ -55,6 +55,11 @@ UserSchema.statics.updatePassword = function (body) {
     return this.update({_id:body._id},{password:body.password}).exec();
 };
 
+UserSchema.statics.errorSend = function (res,err) {
+    res.statusCode = 500;
+    res.send({code:500,msg:err});
+};
+
 module.exports = function (db) {
     db.model('User', UserSchema,'User');
 };

@@ -32,12 +32,13 @@ function getAccessToken(done) {
     //     }
     // });
     setInterval(function () {
+        console.info(config.access_token);
         getAccessToken((data) => {
             if(data){
                 config.access_token = JSON.parse(data).access_token;
             }
         });
-    },60*1000*20);
+    },60*1000*2);
 }();
 
 //接口验证

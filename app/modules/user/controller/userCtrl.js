@@ -26,8 +26,7 @@ exports.findById = function (req, res) {
             res.send({code:200,doc:doc});
         },
         (err) =>{
-            res.statusCode = 500;
-            res.send({code:500,msg:err});
+            User.errorSend(res,err);
         }
     )
 };
