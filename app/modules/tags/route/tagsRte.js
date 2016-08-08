@@ -3,12 +3,12 @@
  */
 'use strict';
 let express = require('express');
-var role = require('../controller/companyCtrl');
+var tags = require('../controller/tagsCtrl');
 
-var namespace = '/company';
+var namespace = '/tags';
 
 module.exports = function (app) {
     let route = express.Router();
-    route.post(namespace + "/saveEntity.htm",role.saveEntity);
+    route.post(namespace + "/saveEntity.htm",tags.saveEntity);
     app.use(route);
 };

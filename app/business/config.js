@@ -7,4 +7,4 @@ module.exports = {
     url:'https://sh.api.weixin.qq.com',
     token:'moka',
     access_token:undefined
-}
+};

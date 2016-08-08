@@ -17,6 +17,16 @@ exports.findList = function (req, res) {
 
 exports.saveEntity = function (req, res) {
     var organize = new Organize(req.body);
+    if(req.body.parentId){
+        Organize.findOneAndUpdate({_id:req.body.parentId},{haveChildren:1}).then(
+            (doc) => {
+                console.info(doc)
+            },
+            (err) => {
+                console.info(err)
+            }
+        )
+    }
     organize.save().then(
         (doc) =>{
             res.send({code:200,doc:doc});
@@ -55,7 +65,7 @@ exports.findAll = function (req, res) {
 exports.findNextAllById = function (req, res) {
     Organize.findOne({_id:req.body._id}).then(
         (doc) =>{
-            if(!doc) res.send({code:200,msg:'没有数据！'});
+            if((doc && doc.haveChildren == 1) || !doc) res.send({code:200,msg:'没有数据！'});
             Organize.find({parentId:doc._id}).then(
                 (arr) =>{
                     if(arr.length > 0){
@@ -92,7 +102,7 @@ exports.findNextAllById = function (req, res) {
         });
         Promise.all(arr).then(
             (arr) =>{
-                num += array.length;
+                num += arr.length;
                 for(var i = 0,j = arr.length;i<j;i++){
                     var data = arr[i];
                     if(data.length > 0){
@@ -101,6 +111,7 @@ exports.findNextAllById = function (req, res) {
                     }else{
                         --num;
                         num == 0 && back(doc);
+                        console.info(num);
                     }
                 }
             }

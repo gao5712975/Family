@@ -4,12 +4,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var CompanySchema = new Schema({
+var TagsSchema = new Schema({
     name:{
         type:String
     }
 });
 
 module.exports = function (db) {
-    db.model('Company', CompanySchema,'Company');
+    db.model('Tags', TagsSchema,'Tags');
 };

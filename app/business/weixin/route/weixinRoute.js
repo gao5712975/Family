@@ -3,15 +3,15 @@
  */
 'use strict';
 let express = require('express');
-let weixinCtrl = require('./weixinCtrl');
-let config = require('../config');
+let weixinCtrl = require('../controller/weixinCtrl');
+let config = require('../../config');
 
 module.exports = function (app) {
     let route = express.Router();
     //接口验证
-    route.get('/',weixinCtrl.portVerified);
+    route.get('/weixin',weixinCtrl.portVerified);
     //消息转接
-    route.post('/',weixinCtrl.forwardNews);
+    route.post('/weixin',weixinCtrl.forwardNews);
 
     app.use(route)
 };

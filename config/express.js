@@ -41,10 +41,10 @@ module.exports = function (db) {
 
     app.all('*',function (req, res, next) {
         let url = '/';
+        console.info(req.originalUrl);
         if(req.originalUrl && req.originalUrl != url){
             url = req.originalUrl;
-            console.info(url);
-            if(/^.*(\/\?).*$/.test(url)){
+            if(/^.*(\?).*$/.test(url)){
                 url = req.originalUrl.split("?")[0];
             }else{
                 let _urlLeg = req.originalUrl.length;
@@ -81,15 +81,6 @@ module.exports = function (db) {
         }
     });
 
-    //weixin
-    config.getGlobFiles("./app/business/weixin/weixinRoute.js").forEach(function (modelPath) {
-        require(path.resolve(modelPath))(app);
-    });
-
-    config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
-        require(path.resolve(modelPath))(app);
-    });
-
     // Globbing model files
     config.getGlobFiles("./app/modules/**/model/*.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(db);
@@ -97,6 +88,15 @@ module.exports = function (db) {
 
     // Globbing routes files
     config.getGlobFiles("./app/modules/**/route/*.js").forEach(function (modelPath) {
+        require(path.resolve(modelPath))(app);
+    });
+    
+    //weixin
+    config.getGlobFiles("./app/business/weixin/weixinRoute.js").forEach(function (modelPath) {
+        require(path.resolve(modelPath))(app);
+    });
+
+    config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
     });
 

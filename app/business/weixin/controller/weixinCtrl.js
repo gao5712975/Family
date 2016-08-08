@@ -3,7 +3,7 @@
  */
 'use strict';
 let crypto = require('crypto');
-let config = require('../config');
+let config = require('../../config');
 let https = require('https');
 let xml2js = require('xml2js');
 
@@ -38,7 +38,7 @@ function getAccessToken(done) {
                 config.access_token = JSON.parse(data).access_token;
             }
         });
-    },60*1000*2);
+    },60*1000*20);
 }();
 
 //接口验证
@@ -70,7 +70,9 @@ let switchMasType = {
     shortvideo:msgTypeVideo,
     video:msgTypeVideo,
     music:'',
-    news:''
+    news:'',
+    event:msgTypeEvent,
+    location:msgTypeLocation
 };
 
 exports.forwardNews = function (req, res) {
@@ -86,10 +88,8 @@ exports.forwardNews = function (req, res) {
             } else{
                 console.info(result);
                 let msgType = (typeof switchMasType[result.xml.MsgType] == 'function') && switchMasType[result.xml.MsgType](result,function (data) {
-                    console.info(data);
                     res.send(data);
                 });
-                console.info(msgType);
                 if(!msgType){
                     res.send('success');
                 }
@@ -147,5 +147,42 @@ function msgTypeVideo(result,done) {
     };
     let xmlBuffer = builder.buildObject(result.xml);
     done && done(xmlBuffer);
+    return true;
+}
+
+function msgTypeLocation(result,done) {
+    console.info(result);
+    done && done('success');
+    // let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
+    // let FromUserName = result.xml.FromUserName;
+    // result.xml.FromUserName = result.xml.ToUserName;
+    // result.xml.ToUserName = FromUserName;
+    // result.xml.MsgType = 'text';
+    // result.xml.Content = '谢谢你的关注！';
+    // let xmlBuffer = builder.buildObject(result.xml);
+    // done && done(xmlBuffer);
+    return true;
+}
+
+function msgTypeEvent(result,done) {
+    switch (result.xml.Event){
+        case 'unsubscribe':
+            done && done('success');
+            break;
+        case 'subscribe':
+            let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
+            let FromUserName = result.xml.FromUserName;
+            result.xml.FromUserName = result.xml.ToUserName;
+            result.xml.ToUserName = FromUserName;
+            result.xml.MsgType = 'text';
+            result.xml.Content = '谢谢你的关注！';
+            let xmlBuffer = builder.buildObject(result.xml);
+            done && done(xmlBuffer);
+            break;
+        case 'LOCATION':
+            console.info(result);
+            done && done('success');
+            break;
+    }
     return true;
 }

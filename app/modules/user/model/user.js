@@ -33,6 +33,11 @@ var UserSchema = new Schema({
     roleName:String,
     organizeName:String,
     companyName:String,
+    type:{
+        type:String,
+        enum:[0,1],
+        default:0
+    },
     valid:{
         type:Number,
         default:0

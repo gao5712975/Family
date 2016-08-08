@@ -3,10 +3,10 @@
  */
 'use strict';
 var mongoose = require("mongoose");
-var Company = mongoose.model('Company');
+var Tags = mongoose.model('Tags');
 
 exports.saveEntity = function (req, res) {
-    var role = new Company(req.body);
+    var role = new Tags(req.body);
     role.save(req.body).then(
         (doc) =>{
             res.send({code:200,doc:doc});

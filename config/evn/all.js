@@ -23,6 +23,6 @@ module.exports = {
     },
     whiteUrlList:[
         '/user/login.htm',
-        '/'
+        '/weixin'
     ]
 };
