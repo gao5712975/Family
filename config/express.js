@@ -92,7 +92,10 @@ module.exports = function (db) {
     });
     
     //weixin
-    config.getGlobFiles("./app/business/weixin/weixinRoute.js").forEach(function (modelPath) {
+    config.getGlobFiles("./app/business/weixin/model/**.js").forEach(function (modelPath) {
+        require(path.resolve(modelPath))(db);
+    });
+    config.getGlobFiles("./app/business/weixin/route/**.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
     });
 

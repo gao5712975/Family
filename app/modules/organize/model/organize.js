@@ -12,10 +12,6 @@ var OrganizeSchema = new Schema({
     sort:{
         type:Number  
     },
-    haveChildren:{
-        default:0,
-        enum:[0,1]
-    },
     parentId: Schema.Types.ObjectId,
     parentList:Array
 });

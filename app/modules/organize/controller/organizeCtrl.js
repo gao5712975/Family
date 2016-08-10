@@ -17,16 +17,6 @@ exports.findList = function (req, res) {
 
 exports.saveEntity = function (req, res) {
     var organize = new Organize(req.body);
-    if(req.body.parentId){
-        Organize.findOneAndUpdate({_id:req.body.parentId},{haveChildren:1}).then(
-            (doc) => {
-                console.info(doc)
-            },
-            (err) => {
-                console.info(err)
-            }
-        )
-    }
     organize.save().then(
         (doc) =>{
             res.send({code:200,doc:doc});
@@ -65,7 +55,7 @@ exports.findAll = function (req, res) {
 exports.findNextAllById = function (req, res) {
     Organize.findOne({_id:req.body._id}).then(
         (doc) =>{
-            if((doc && doc.haveChildren == 1) || !doc) res.send({code:200,msg:'没有数据！'});
+            if(!doc) res.send({code:200,msg:'没有数据！'});
             Organize.find({parentId:doc._id}).then(
                 (arr) =>{
                     if(arr.length > 0){
