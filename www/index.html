@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <title>moka</title>
   <link rel="stylesheet" href="src/static/load/webuploader.css">
+  <link rel="stylesheet" href="src/static/chosen/chosen.css">
   <script src="src/static/jquery/jquery.min.js"></script>
+  <script src="src/static/chosen/chosen.js"></script>
   <script src="src/static/load/webuploader.min.js"></script>
   <script src="src/static/angular/angular.min.js"></script>
   <script src="src/static/ui.router/angular-ui-router.min.js"></script>
@@ -34,6 +36,21 @@
     </label>
     <button ng-click="save()">用户提交</button>
   </form>
+
+  <div style="margin: 40px">
+    <select data-placeholder="请选择项目投放" class="chosen-select" style="width:250px;opacity:0">
+      <option value="">-- 请选择 --</option>
+      <option ng-repeat="o in organizeList" value="{{o._id}}">{{o.name}}</option>
+    </select>
+  </div>
+
+  <div style="margin: 40px">
+    <select data-placeholder="请选择项目投放" class="chosen-select" style="width:250px;opacity:0">
+      <option value="">-- 请选择 --</option>
+      <option ng-repeat="o in organizeList" value="{{o._id}}">{{o.name}}</option>
+    </select>
+  </div>
+
 </div>
 <div ng-controller="AgencyCtrl">
   <form>

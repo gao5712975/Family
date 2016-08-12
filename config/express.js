@@ -4,6 +4,7 @@
 "use strict";
 var express = require('express'),
     path = require("path"),
+    Url = require("url"),
     // nwPath = process.execPath,
     // nwDir = path.dirname(nwPath),
     // session = require("express-session"),
@@ -21,7 +22,7 @@ var express = require('express'),
     
 module.exports = function (db) {
     var app = express();
-    app.use(cors());
+    app.use(cors());//跨域
     app.set('showStackError', false);
     
     app.use(logger('dev'));
@@ -37,22 +38,11 @@ module.exports = function (db) {
 
     // app.use(flash());
 
-    app.use(favicon('public/favicon/favicon.ico'));
+    // app.use(favicon('public/favicon/favicon.ico'));
 
     app.all('*',function (req, res, next) {
-        let url = '/';
-        console.info(req.originalUrl);
-        if(req.originalUrl && req.originalUrl != url){
-            url = req.originalUrl;
-            if(/^.*(\?).*$/.test(url)){
-                url = req.originalUrl.split("?")[0];
-            }else{
-                let _urlLeg = req.originalUrl.length;
-                if(req.originalUrl.lastIndexOf('/') == _urlLeg - 1){
-                    url = req.originalUrl.substr(0,_urlLeg-1)
-                }
-            }
-        }
+        let url = Url.parse(req.originalUrl).pathname;
+        console.info(url);
         let token = req.get(Config.tokenHeaders);
         if(config.whiteUrlList.indexOf(url) != -1){
             Redis((client) => {

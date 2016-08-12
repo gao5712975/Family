@@ -3,13 +3,14 @@
  */
 'use strict';
 let https = require('https');
-let url = require('url')
+let url = require('url');
 let querystring = require('querystring');
 let mongoose = require("mongoose");
 let WxMenu = mongoose.model('WxMenu');
 let async = require('async');
 let config = require('../../config');
 let _ = require('lodash');
+let request = require('request');
 
 /**
  * 微信菜单的保存
@@ -105,7 +106,7 @@ exports.saveMenuEntity = function (req, res) {
 exports.releaseMenu = function (req, res) {
     async.waterfall([
         function (done) {
-            WxMenu.find({parentId:null},{_id:0,__v:0,countMenu:0,type:0,click:0,key:0}).then(
+            WxMenu.find({parentId:null},{__v:0,countMenu:0,type:0,click:0,key:0}).then(
                 (doc) => {
                     done(null,doc);
                 },
@@ -139,45 +140,22 @@ exports.releaseMenu = function (req, res) {
                 let ob = data[i];
                 ob.set('sub_button',result[i],{strict:false});
             }
-
-            process.stdout.write(JSON.stringify(data));
-            let post_data = JSON.stringify({"button":data})// querystring.stringify({"button":data})// JSON.stringify();
-
+            
             let _url = `https://${config.url}/cgi-bin/menu/create?access_token=${config.access_token}`;
-            console.info(_url);
-            let options = url.parse(_url);
-            options.headers = {
-                'Content-Type': 'application/json',
-                'Content-Length': post_data.length
-            };
-            options.method = 'POST';
-
-/*            var options = {
-                hostname: `${config.url}`,
-                port: 80,
-                path: `/cgi-bin/menu/create?access_token=${config.access_token}`,
+            var options = {
+                url: _url,
+                json: true,
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': post_data.length
+                body: {button:data}
+            };
+            request.post(options, (err, _res, body) => {
+                if (err) {
+                    res.statusCode = 500;
+                    res.send({code:500,msg:err});
+                }else{
+                    res.send({code:200,doc:body});
                 }
-            };*/
-
-            let value = '';
-            let req = https.request(options,(_res) => {
-                _res.on('data', (d) => {
-                    value += d;
-                });
-                _res.on('end',() => {
-                    res.send({code:200,doc:value,data:JSON.stringify(data)});
-                })
             });
-            req.on('error', (err) => {
-                res.statusCode = 500;
-                res.send({code:500,msg:err});
-            });
-            req.write(post_data);
-            req.end();
         }
     })
 };

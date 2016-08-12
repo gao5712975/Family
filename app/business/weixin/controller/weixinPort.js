@@ -40,7 +40,7 @@ let xml2js = require('xml2js');
                 config.access_token = JSON.parse(data).access_token;
             }
         });
-    },60*1000*20);
+    },60*1000*10);
 }();
 
 /**

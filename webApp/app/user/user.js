@@ -5,7 +5,8 @@ ApplicationConfig.registerModule("userModule");
 
 angular.module('userModule',[])
     
-.controller('UserCtrl',['$scope','$http',function ($scope,$http) {
+.controller('UserCtrl',['$scope','$http','$q',function ($scope,$http,$q) {
+    
     $scope.user = {};
     $scope.user.sort = 0;
     $scope.save = function () {
@@ -22,21 +23,38 @@ angular.module('userModule',[])
             console.info(res);
         })
     };
-    $http.get(baseUrl + '/organize/findAll.htm/').success(function (res) {
+    var organize = $http.get(baseUrl + '/organize/findAll.htm').success(function (res) {
         if(res && res.code == 200){
             $scope.organizeList = res.doc;
         }
     });
-    $http.get(baseUrl + '/company/findAll.htm/').success(function (res) {
+    $http.get(baseUrl + '/company/findAll.htm').success(function (res) {
         if(res && res.code == 200){
             $scope.companyList = res.doc;
         }
     });
-    $http.get(baseUrl + '/role/findAll.htm/').success(function (res) {
+    $http.get(baseUrl + '/role/findAll.htm').success(function (res) {
         if(res && res.code == 200){
             $scope.roleList = res.doc;
         }
     });
+
+    $(function () {
+        $q.all([organize]).then(function () {
+            setTimeout(function () {
+                $scope.$emit('$load')
+            })
+        })
+    });
+
+    $scope.$on('$load',function () {
+        $('.chosen-select').chosen({no_results_text: '没有搜索到此结果'}).change(function (tar, val) {
+            $scope.$apply(function () {
+                $scope.placeholder = val
+            })
+        });
+    });
+
 }])
 
 .controller('FileUploadCtrl',['$scope','$http',function ($scope,$http) {
@@ -59,5 +77,5 @@ angular.module('userModule',[])
             }
         })
     }
-}])
+}]);
 

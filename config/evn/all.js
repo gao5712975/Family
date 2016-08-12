@@ -21,8 +21,11 @@ module.exports = {
         ttl : 20,
         prefix:'moka'
     },
+    //请求白名单
     whiteUrlList:[
         '/user/login.htm',
-        '/weixin'
+        '/weixin',
+        '/load/profile.htm',
+        '/organize/findAll.htm'
     ]
 };
