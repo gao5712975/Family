@@ -50,7 +50,11 @@ module.exports = function (db) {
                     if(doc){
                         client.expire(`${token}`, Config.sessionTtl);
                         client.quit();
-                        res.send({code:200});
+                        if(url == '/user/login.htm'){
+                            res.send({code:200});
+                        }else{
+                            next();
+                        }
                     }else{
                         next();
                     }
@@ -75,21 +79,22 @@ module.exports = function (db) {
     config.getGlobFiles("./app/modules/**/model/*.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(db);
     });
+    //weixin
+    config.getGlobFiles("./app/business/weixin/model/**.js").forEach(function (modelPath) {
+        require(path.resolve(modelPath))(db);
+    });
 
     // Globbing routes files
     config.getGlobFiles("./app/modules/**/route/*.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
     });
-    
-    //weixin
-    config.getGlobFiles("./app/business/weixin/model/**.js").forEach(function (modelPath) {
-        require(path.resolve(modelPath))(db);
-    });
-    config.getGlobFiles("./app/business/weixin/route/**.js").forEach(function (modelPath) {
+
+    config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
     });
 
-    config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
+
+    config.getGlobFiles("./app/business/weixin/route/**.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
     });
 

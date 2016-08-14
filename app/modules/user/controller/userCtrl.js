@@ -10,6 +10,7 @@ let Page = require('../../base/page');
 let Redis = require('../../base/redis');
 let Config = require('../../../config/config');
 let crypto = require('crypto');
+let async = require('async');
 
 exports.findList = function (req, res) {
     Page(req.body.pageIndex,req.body.pageSize,User,{},(err,doc) => {
@@ -105,19 +106,36 @@ exports.login = function (req, res) {
                 let md5 = crypto.createHash('md5');
                 var sessionId = md5.update(`${doc._id}`).digest('hex');
                 res.set(Config.tokenHeaders,sessionId);
-                let $user = User.findUsersById({_id:doc._id});
-                let $role = Role.findAllAuthById({_id:doc.roleId});
-                Promise.all([$user,$role]).then(
-                    (arr) => {
-                        var _session = {user:arr[0], authList:arr[1]};
-                        Redis( (client) => {
-                            client.set(`${sessionId}`,JSON.stringify(_session));
-                            client.expire(`${sessionId}`, Config.sessionTtl);
-                            client.quit();
-                            res.send({code:200,doc:doc,token:sessionId});
-                        });
+                async.series({
+                    user:function (done) {
+                        User.findUsersById({_id:doc._id}).then(
+                            (doc) => {
+                                done(null,doc);
+                            },
+                            (err) => {
+                                done(err);
+                            }
+                        )
+                    },
+                    auth:function (done) {
+                        Role.findAllAuthById({_id:doc.roleId}).then(
+                            (doc) => {
+                                done(null,doc);
+                            },
+                            (err) => {
+                                done(err);
+                            }
+                        )
                     }
-                );
+                },function (err, result) {
+                    var _session = {user:result.user, authList:result.auth};
+                    Redis( (client) => {
+                        client.set(`${sessionId}`,JSON.stringify(_session));
+                        client.expire(`${sessionId}`, Config.sessionTtl);
+                        client.quit();
+                        res.send({code:200,doc:doc,token:sessionId});
+                    });
+                });
             }
         },
         (err) =>{

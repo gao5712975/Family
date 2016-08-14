@@ -2,6 +2,9 @@
  * Created by moka on 16-8-9.
  */
 'use strict';
+let mongoose = require('mongoose');
+let WxNews = mongoose.model('WxNews');
+let User = mongoose.model('User');
 let crypto = require('crypto');
 let config = require('../../config');
 let https = require('https');
@@ -61,6 +64,7 @@ exports.portVerified = function (req, res) {
     let sha1 = crypto.createHash('sha1');
     let sha1Str = sha1.update(str).digest('hex');
 
+    console.info(sha1Str == signature);
     if(sha1Str == signature){
         res.send(echostr);
     }else{
@@ -76,7 +80,7 @@ let switchMasType = {
     shortvideo:msgTypeVideo,
     video:msgTypeVideo,
     music:'',
-    news:'',
+    news:msgTypeNews,
     event:msgTypeEvent,
     location:msgTypeLocation
 };
@@ -87,17 +91,21 @@ exports.forwardNews = function (req, res) {
         xml += data
     });
     req.once('end',() => {
-        console.info(xml);
         xml2js.parseString(xml,{explicitArray:false},(err,result) => {
             if(err){
                 res.send({code:500,msg:err})
             } else{
-                console.info(result);
-                let msgType = (typeof switchMasType[result.xml.MsgType] == 'function') && switchMasType[result.xml.MsgType](result,function (data) {
+                if(result.xml.Content == '图文'){
+                    switchMasType['news'](result,function (data) {
                         res.send(data);
-                    });
-                if(!msgType){
-                    res.send('success');
+                    })
+                }else{
+                    let msgType = (typeof switchMasType[result.xml.MsgType] == 'function') && switchMasType[result.xml.MsgType](result,function (data) {
+                            res.send(data);
+                        });
+                    if(!msgType){
+                        res.send('success');
+                    }
                 }
             }
         })
@@ -190,5 +198,34 @@ function msgTypeEvent(result,done) {
             done && done('success');
             break;
     }
+    return true;
+}
+
+function msgTypeNews(result,done) {
+    let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
+    let FromUserName = result.xml.FromUserName;
+    result.xml.FromUserName = result.xml.ToUserName;
+    result.xml.ToUserName = FromUserName;
+    result.xml.MsgType = 'news';
+    WxNews.findOne({_id:"57b0921524a840801ddd4c5d"}).then(
+        (doc) => {
+            result.xml.ArticleCount = doc.articles.length;
+            let article = result.xml.Articles = {item:[]};
+            doc.articles.forEach((data) => {
+                article.item.push({
+                    Title:data.title,
+                    Description:data.description,
+                    PicUrl:data.picUrl,
+                    Url:data.url
+                })
+            });
+            let xmlBuffer = builder.buildObject(result.xml);
+            console.info(xmlBuffer);
+            done && done(xmlBuffer);
+        },
+        (err) => {
+            console.info(err)
+        }
+    );
     return true;
 }

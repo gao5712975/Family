@@ -3,9 +3,9 @@
  * 用户
  */
 'use strict';
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
-var UserSchema = new Schema({
+let mongoose = require("mongoose");
+let Schema = mongoose.Schema;
+let UserSchema = new Schema({
     user: {
         type:String,
         required:[true, '请填写用户名']
