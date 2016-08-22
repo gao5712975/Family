@@ -5,11 +5,16 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TagsSchema = new Schema({
-    name:{
-        type:String
+    tagId:{
+        type:Schema.Types.ObjectId,
+        ref:'Tags'
+    },
+    userId:{
+        type:Schema.Types.ObjectId,
+        ref:'User'
     }
 });
 
 module.exports = function (db) {
-    db.model('Tags', TagsSchema,'Tags');
+    db.model('TagsUser', TagsSchema,'TagsUser');
 };

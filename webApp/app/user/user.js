@@ -39,22 +39,6 @@ angular.module('userModule',[])
         }
     });
 
-    $(function () {
-        $q.all([organize]).then(function () {
-            setTimeout(function () {
-                $scope.$emit('$load')
-            })
-        })
-    });
-
-    $scope.$on('$load',function () {
-        $('.chosen-select').chosen({no_results_text: '没有搜索到此结果'}).change(function (tar, val) {
-            $scope.$apply(function () {
-                $scope.placeholder = val
-            })
-        });
-    });
-
 }])
 
 .controller('FileUploadCtrl',['$scope','$http',function ($scope,$http) {
@@ -71,9 +55,9 @@ angular.module('userModule',[])
 .controller('LoginCtrl',['$scope','$http',function ($scope,$http) {
     $scope.user = {user:'admin',password:'666666'}
     $scope.login = function () {
-        $http.post(baseUrl + '/user/login.htm/',$scope.user).success(function (res) {
+        $http.post(baseUrl + '/user/login.htm',$scope.user).success(function (res) {
             if(res && res.code == 200){
-                window.sessionStorage.setItem('token',res.doc._id);
+                window.sessionStorage.setItem('token',res.token);
             }
         })
     }

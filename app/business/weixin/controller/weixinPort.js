@@ -4,11 +4,13 @@
 'use strict';
 let mongoose = require('mongoose');
 let WxNews = mongoose.model('WxNews');
+let WxKeyWord = mongoose.model('WxKeyWord');
 let User = mongoose.model('User');
 let crypto = require('crypto');
-let config = require('../../config');
+let config = require('../config');
 let https = require('https');
 let xml2js = require('xml2js');
+let async = require('async');
 /**
  * 获取与微信接口回话的凭证
  */
@@ -31,11 +33,11 @@ let xml2js = require('xml2js');
         req.end();
     }
 
-    getAccessToken((data) => {
+/*    getAccessToken((data) => {
         if(data){
             config.access_token = JSON.parse(data).access_token;
         }
-    });
+    });*/
     setInterval(function () {
         console.info(config.access_token);
         getAccessToken((data) => {
@@ -95,22 +97,91 @@ exports.forwardNews = function (req, res) {
             if(err){
                 res.send({code:500,msg:err})
             } else{
-                if(result.xml.Content == '图文'){
-                    switchMasType['news'](result,function (data) {
-                        res.send(data);
-                    })
-                }else{
-                    let msgType = (typeof switchMasType[result.xml.MsgType] == 'function') && switchMasType[result.xml.MsgType](result,function (data) {
-                            res.send(data);
-                        });
-                    if(!msgType){
-                        res.send('success');
+                //查找是否关键字
+                async.series({
+                    keyWord:function (done) {
+                        let reg = new RegExp(result.xml.Content,'g');
+                        WxKeyWord.findOne({keyword:{$elemMatch:{name:reg}}}).then(
+                            (doc) =>{
+                                done(null,doc);
+                            },
+                            (err) =>{
+                                done(err);
+                            }
+                        )
                     }
-                }
+                },function (err, data) {
+                    if(!data.keyWord){
+                        res.send('success');
+                    }else{
+                        switchMasType[data.keyWord.type](result,data.keyWord,function (data) {
+                            res.send(data);
+                        })
+                    }
+                });
             }
         })
     });
 };
+
+
+let materialType = {
+    'text':textMaterial,
+    'image':imageMaterial,
+    'voice':voiceMaterial,
+    'video':videoMaterial,
+    'news':newsMaterial
+};
+
+function textMaterial() {
+
+}
+
+function imageMaterial() {
+
+}
+
+function voiceMaterial() {
+
+}
+
+function videoMaterial() {
+
+}
+
+function newsMaterial(result,params,done) {
+    let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
+    result.xml.MsgType = params.type;
+    WxNews.findOne({_id:params[params.type][0]}).then(
+        (doc) => {
+            result.xml.ArticleCount = doc.articles.length;
+            let article = result.xml.Articles = {item:[]};
+            doc.articles.forEach((data) => {
+                article.item.push({
+                    Title:data.title,
+                    Description:data.description,
+                    PicUrl:data.picUrl,
+                    Url:data.url
+                })
+            });
+            let xmlBuffer = builder.buildObject(result.xml);
+            done && done(xmlBuffer);
+        },
+        (err) => {
+            console.info(err)
+        }
+    );
+}
+
+function msgTypeNews(result,params,done) {
+    let FromUserName = result.xml.FromUserName;
+    result.xml.FromUserName = result.xml.ToUserName;
+    result.xml.ToUserName = FromUserName;
+    materialType[params.type](result,params,function (data) {
+        done(data)
+    });
+    return true;
+}
 
 function msgTypeText(result,done) {
     let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
@@ -198,34 +269,5 @@ function msgTypeEvent(result,done) {
             done && done('success');
             break;
     }
-    return true;
-}
-
-function msgTypeNews(result,done) {
-    let builder = new xml2js.Builder({rootName:'xml',xmldec:{},cdata:true,headless:true});
-    let FromUserName = result.xml.FromUserName;
-    result.xml.FromUserName = result.xml.ToUserName;
-    result.xml.ToUserName = FromUserName;
-    result.xml.MsgType = 'news';
-    WxNews.findOne({_id:"57b0921524a840801ddd4c5d"}).then(
-        (doc) => {
-            result.xml.ArticleCount = doc.articles.length;
-            let article = result.xml.Articles = {item:[]};
-            doc.articles.forEach((data) => {
-                article.item.push({
-                    Title:data.title,
-                    Description:data.description,
-                    PicUrl:data.picUrl,
-                    Url:data.url
-                })
-            });
-            let xmlBuffer = builder.buildObject(result.xml);
-            console.info(xmlBuffer);
-            done && done(xmlBuffer);
-        },
-        (err) => {
-            console.info(err)
-        }
-    );
     return true;
 }

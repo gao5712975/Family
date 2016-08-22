@@ -25,7 +25,6 @@ module.exports = {
     whiteUrlList:[
         '/user/login.htm',
         '/weixin',
-        '/load/profile.htm',
-        '/organize/findAll.htm'
+        '/load/profile.htm'
     ]
 };

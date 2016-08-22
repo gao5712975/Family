@@ -3,12 +3,14 @@
  */
 'use strict';
 let express = require('express');
-var tags = require('../controller/tagsCtrl');
+var tagsUser = require('../controller/tagsUserCtrl');
 
-var namespace = '/tags';
+var namespace = '/tagsUser';
 
 module.exports = function (app) {
     let route = express.Router();
-    route.post(namespace + "/saveEntity.htm",tags.saveEntity);
+    route.post(namespace + "/findList.htm",tagsUser.findList);
+    route.post(namespace + "/saveEntity.htm",tagsUser.saveEntity);
+    route.post(namespace + "/findTagUser.htm",tagsUser.findTagUser);
     app.use(route);
 };

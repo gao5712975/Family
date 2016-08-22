@@ -34,7 +34,7 @@ module.exports = function (db) {
 
     //静态文件 // Setting the app router and static folder
     app.use(express.static('public'));
-    // app.use(express.static('www'));
+    app.use(express.static('www'));
 
     // app.use(flash());
 

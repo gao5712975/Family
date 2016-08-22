@@ -12,38 +12,35 @@ let WxKeyWordSchema = new Schema({
     },
     keyword: [
         {
-            name:{
-                type:String
+            name: {
+                type: String
             },
-            type:{
-                type:String,
-                enum:[0,1],
-                default:0
+            type: {
+                type: String,
+                enum: [0, 1],
+                default: 0
             }
         }
     ],
-    replyList: [
-        {
-            type: {
-                type: String
-            },
-            content: [{
-                type: String
-            }],
-            pic: [{
-                type: String
-            }],
-            voice: [{
-                type: String
-            }],
-            video: [{
-                type: String
-            }],
-            news: [{
-                type: String
-            }]
-        }
-    ],
+    type: {
+        type: String,
+        enum: ['text','image','voice','video','news']
+    },
+    text: [{
+        type: String
+    }],
+    image: [{
+        type: String
+    }],
+    voice: [{
+        type: String
+    }],
+    video: [{
+        type: String
+    }],
+    news: [{
+        type: String
+    }],
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -57,5 +54,5 @@ let WxKeyWordSchema = new Schema({
 });
 
 module.exports = function (db) {
-    db.model('WxMenu', WxMenuSchema, 'WxMenu');
+    db.model('WxKeyWord', WxKeyWordSchema, 'WxKeyWord');
 };

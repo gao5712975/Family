@@ -4,12 +4,10 @@
 'use strict';
 let https = require('https');
 let url = require('url');
-let querystring = require('querystring');
 let mongoose = require("mongoose");
 let WxMenu = mongoose.model('WxMenu');
 let async = require('async');
-let config = require('../../config');
-let _ = require('lodash');
+let config = require('../config');
 let request = require('request');
 
 /**
@@ -148,10 +146,10 @@ exports.releaseMenu = function (req, res) {
                 method: 'POST',
                 body: {button:data}
             };
-            request.post(options, (err, _res, body) => {
-                if (err) {
+            request.post(options, (_err, _res, body) => {
+                if (_err) {
                     res.statusCode = 500;
-                    res.send({code:500,msg:err});
+                    res.send({code:500,msg:_err});
                 }else{
                     res.send({code:200,doc:body});
                 }

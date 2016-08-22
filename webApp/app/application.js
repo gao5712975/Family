@@ -5,7 +5,7 @@
 var ApplicationConfig = (function () {
     var moduleName = "app";
     /*angular模板导入*/
-    var moduleDependencies = ['ui.router'];
+    var moduleDependencies = ['ui.router','ui.select','ngSanitize'];
 
     // Add a new vertical module
     var registerModule = function(name) {
@@ -23,10 +23,23 @@ var ApplicationConfig = (function () {
 
 var App = angular.module(ApplicationConfig.moduleName, ApplicationConfig.moduleDependencies);
 
+App.directive('repeatFinish',['$timeout',function($timeout){
+    return {
+        link: function(scope,element,attr){
+            if(scope.$last == true){
+                $timeout(function () {
+                    if(attr.repeatFinish){
+                        scope.$emit(attr.repeatFinish);
+                    }
+                });
+            }
+        }
+    }
+}]);
 
 App.config(['$httpProvider',function ($httpProvider) {
     $httpProvider.interceptors.push('HttpInterceptor')
-}])
+}]);
 
 App.factory('HttpInterceptor',['$window',function ($window) {
     return {

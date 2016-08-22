@@ -16,7 +16,7 @@ exports.findList = function (req, res) {
 };
 
 exports.findById = function (req, res) {
-    WxNews.findOne(req.body._id).then(
+    WxNews.findOne({_id:req.body._id}).then(
         (doc) =>{
             res.send({code:200,doc:doc});
         },
@@ -27,7 +27,7 @@ exports.findById = function (req, res) {
     )
 };
 
-exports.saveNewsEntity = function (req, res) {
+exports.saveEntity = function (req, res) {
     var wxNews = new WxNews(req.body);
     if(wxNews.articles && (wxNews.articles.length > 10 ||　wxNews.articles.length == 0)){
         res.send({code:500,msg:'图文消息个数，限制为1 - 10条以内'});

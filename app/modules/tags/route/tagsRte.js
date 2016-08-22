@@ -9,6 +9,7 @@ var namespace = '/tags';
 
 module.exports = function (app) {
     let route = express.Router();
-    route.post(namespace + "/saveEntity.htm",tags.saveEntity);
+    route.post(namespace + "/findList.htm", tags.findList);
+    route.post(namespace + "/saveEntity.htm", tags.saveEntity);
     app.use(route);
 };
