@@ -7,11 +7,13 @@ var Schema = mongoose.Schema;
 var TagsSchema = new Schema({
     tagId:{
         type:Schema.Types.ObjectId,
-        ref:'Tags'
+        ref:'Tags',
+        required:[true]
     },
     userId:{
         type:Schema.Types.ObjectId,
-        ref:'User'
+        ref:'User',
+        required:[true]
     }
 });
 

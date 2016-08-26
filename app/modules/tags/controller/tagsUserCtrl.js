@@ -7,7 +7,7 @@ var TagsUser = mongoose.model('TagsUser');
 let Page = require('../../base/page');
 
 exports.findList = function (req, res) {
-    Page(req.body.pageIndex,req.body.pageSize,TagsUser,{},(err,doc) => {
+    Page(req.body.pageIndex,req.body.pageSize,TagsUser,{populate:['tagId','userId']},(err,doc) => {
         if (err)
             res.send({code: 500, msg: err});
         else
@@ -27,7 +27,12 @@ exports.saveEntity = function (req, res) {
         }
     )
 };
-
+/**
+ * [findTagUser description]
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
 exports.findTagUser = function (req, res) {
     TagsUser.find({tagId:req.body.tagId,userId:req.body.userId})
         .populate('User')
