@@ -4,4 +4,4 @@
 module.exports = {
     tokenHeaders:'express-token-key',
     sessionTtl: 30*60 //m
-}
+};

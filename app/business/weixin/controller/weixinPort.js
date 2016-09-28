@@ -45,7 +45,7 @@ let async = require('async');
                 config.access_token = JSON.parse(data).access_token;
             }
         });
-    },60*1000*10);
+    },60 * 1000 * 30);
 }();
 
 /**

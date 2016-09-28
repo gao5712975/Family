@@ -12,6 +12,7 @@ let WxMenuSchema = new Schema({
     },
     type:{
         type:String
+
     },
     key:{
         type:String

@@ -44,6 +44,7 @@ angular.module('userModule',[])
 .controller('FileUploadCtrl',['$scope','$http',function ($scope,$http) {
     var uploader = WebUploader.create({
         auto:true,
+        compress:false,
         server: baseUrl + '/load/profile.htm',
         pick: '#fileUpload',
     })

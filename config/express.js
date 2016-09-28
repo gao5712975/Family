@@ -23,7 +23,7 @@ var express = require('express'),
 module.exports = function (db) {
     var app = express();
     app.use(cors());//跨域
-    app.set('showStackError', false);
+    app.set('showStackError', true);
     
     app.use(logger('dev'));
     app.use(bodyParser.json(config.bodyParser.json));// for parsing application/json
@@ -92,7 +92,6 @@ module.exports = function (db) {
     config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
     });
-
 
     config.getGlobFiles("./app/business/weixin/route/**.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
