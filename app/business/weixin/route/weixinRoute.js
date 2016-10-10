@@ -10,9 +10,9 @@ let namespace = '/weixin';
 module.exports = function (app) {
     let route = express.Router();
     //接口验证
-    route.get(namespace,weixinPort.portVerified);
+    route.get(namespace, weixinPort.portVerified);
     //消息转接
-    route.post(namespace,weixinPort.forwardNews);
-    
+    route.post(namespace, weixinPort.forwardNews);
+
     app.use(route);
 };

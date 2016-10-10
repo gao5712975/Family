@@ -4,25 +4,25 @@
 "use strict";
 
 module.exports = {
-    url:'mongodb://127.0.0.1/moka',
-    port: 8081,
+    url: 'mongodb://127.0.0.1/moka',
+    port: 80,
     bodyParser: {
-        json: {limit: '150kb'},
-        urlencoded: {extended: true}
+        json: { limit: '150kb' },
+        urlencoded: { extended: true }
     },
-    mongoStore:{
-        url:'mongodb://127.0.0.1/session',
-        collection:'Sessions'
+    mongoStore: {
+        url: 'mongodb://127.0.0.1/session',
+        collection: 'Sessions'
     },
-    redisStore:{
+    redisStore: {
         host: "127.0.0.1",
         port: 6379,
         db: 0,
-        ttl : 20,
-        prefix:'moka'
+        ttl: 20,
+        prefix: 'moka'
     },
     //请求白名单
-    whiteUrlList:[
+    whiteUrlList: [
         '/user/login.htm',
         '/weixin',
         '/load/profile.htm'

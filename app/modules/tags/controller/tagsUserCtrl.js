@@ -7,23 +7,23 @@ var TagsUser = mongoose.model('TagsUser');
 let Page = require('../../base/page');
 
 exports.findList = function (req, res) {
-    Page(req.body.pageIndex,req.body.pageSize,TagsUser,{populate:['tagId','userId']},(err,doc) => {
+    Page(req.body.pageIndex, req.body.pageSize, TagsUser, { populate: ['tagId', 'userId'] }, (err, doc) => {
         if (err)
-            res.send({code: 500, msg: err});
+            res.send({ code: 500, msg: err });
         else
-            res.send({code: 200, doc: doc});
+            res.send({ code: 200, doc: doc });
     })
 };
 
 exports.saveEntity = function (req, res) {
     var role = new TagsUser(req.body);
     role.save(req.body).then(
-        (doc) =>{
-            res.send({code:200,doc:doc});
+        (doc) => {
+            res.send({ code: 200, doc: doc });
         },
-        (err) =>{
+        (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     )
 };
@@ -34,16 +34,16 @@ exports.saveEntity = function (req, res) {
  * @return {[type]}     [description]
  */
 exports.findTagUser = function (req, res) {
-    TagsUser.find({tagId:req.body.tagId,userId:req.body.userId})
+    TagsUser.find({ tagId: req.body.tagId, userId: req.body.userId })
         .populate('User')
         .populate('Tags')
         .then(
         (doc) => {
-            res.send({code:200,doc:doc});
+            res.send({ code: 200, doc: doc });
         },
         (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
-    )
+        )
 };

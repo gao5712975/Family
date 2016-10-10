@@ -9,8 +9,8 @@ var namespace = '/company';
 
 module.exports = function (app) {
     let route = express.Router();
-    route.get(namespace + "/findAll.htm",role.findAll);
-    route.post(namespace + "/findList.htm",role.findList);
-    route.post(namespace + "/saveEntity.htm",role.saveEntity);
+    route.get(namespace + "/findAll.htm", role.findAll);
+    route.post(namespace + "/findList.htm", role.findList);
+    route.post(namespace + "/saveEntity.htm", role.saveEntity);
     app.use(route);
 };

@@ -6,16 +6,16 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var OrganizeSchema = new Schema({
-    name:{
-        type:String
+    name: {
+        type: String
     },
-    sort:{
-        type:Number  
+    sort: {
+        type: Number
     },
     parentId: Schema.Types.ObjectId,
-    parentList:Array
+    parentList: Array
 });
 
 module.exports = function (db) {
-    db.model('Organize', OrganizeSchema,'Organize');
+    db.model('Organize', OrganizeSchema, 'Organize');
 };

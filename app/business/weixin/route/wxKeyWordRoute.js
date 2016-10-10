@@ -9,14 +9,14 @@ let namespace = '/weixin/keyword';
 
 module.exports = function (app) {
     let route = express.Router();
-    
-    route.post(namespace + '/saveEntity.htm',wxKeyWordCtrl.saveEntity);
-    
-    route.post(namespace + "/findList.htm",wxKeyWordCtrl.findList);
-    
-    route.post(namespace + "/findById.htm",wxKeyWordCtrl.findById);
-    
-    route.post(namespace + "/findByKey.htm",wxKeyWordCtrl.findByKey);
+
+    route.post(namespace + '/saveEntity.htm', wxKeyWordCtrl.saveEntity);
+
+    route.post(namespace + "/findList.htm", wxKeyWordCtrl.findList);
+
+    route.post(namespace + "/findById.htm", wxKeyWordCtrl.findById);
+
+    route.post(namespace + "/findByKey.htm", wxKeyWordCtrl.findByKey);
 
     app.use(route)
 };

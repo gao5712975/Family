@@ -9,7 +9,7 @@ var namespace = '/auth';
 
 module.exports = function (app) {
     let route = express.Router();
-    route.post(namespace + "/findList.htm",auth.findList);
-    route.post(namespace + "/saveEntity.htm",auth.saveEntity);
+    route.post(namespace + "/findList.htm", auth.findList);
+    route.post(namespace + "/saveEntity.htm", auth.saveEntity);
     app.use(route);
 };

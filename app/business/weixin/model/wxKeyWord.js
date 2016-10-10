@@ -24,7 +24,7 @@ let WxKeyWordSchema = new Schema({
     ],
     type: {
         type: String,
-        enum: ['text','image','voice','video','news']
+        enum: ['text', 'image', 'voice', 'video', 'news']
     },
     text: [{
         type: String
@@ -49,8 +49,8 @@ let WxKeyWordSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Company'
     },
-    create_time: {type: Date, default: new Date()},
-    update_time: {type: Date, default: new Date()}
+    create_time: { type: Date, default: new Date() },
+    update_time: { type: Date, default: new Date() }
 });
 
 module.exports = function (db) {

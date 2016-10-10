@@ -6,13 +6,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var UserDetailSchema = new Schema({
-    userId:{type:Schema.Types.ObjectId,ref:'User'},
-    valid:{type:Number,default:0},
-    sort:Number,
-    create_time: {type: Date, default: new Date()},
-    update_time: {type: Date, default: new Date()}
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    valid: { type: Number, default: 0 },
+    sort: Number,
+    create_time: { type: Date, default: new Date() },
+    update_time: { type: Date, default: new Date() }
 });
 
 module.exports = function (db) {
-    db.model('UserDetail', UserDetailSchema,'UserDetail');
+    db.model('UserDetail', UserDetailSchema, 'UserDetail');
 };

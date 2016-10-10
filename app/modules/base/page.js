@@ -20,7 +20,7 @@ module.exports = function (page, pageSize, Model, options, callback) {
     var start = (page - 1) * pageSize;
     var $page = {
         pageIndex: page,
-        pageSize:pageSize
+        pageSize: pageSize
     };
     async.parallel({
         count: function (done) {  // 查询数量
@@ -35,7 +35,7 @@ module.exports = function (page, pageSize, Model, options, callback) {
         }
     }, function (err, results) {
         var count = results.count;
-        $page.pageCount =  Math.ceil((count - 1) / pageSize);
+        $page.pageCount = Math.ceil((count - 1) / pageSize);
         $page.results = results.records;
         callback(err, $page);
     });

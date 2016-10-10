@@ -15,7 +15,6 @@ gulp.task('default', function () {
         ignore:[
             'public/**', 
             'test/**',
-            'gulpfile.js',
             'webApp',
             'www',
             'node_modules'

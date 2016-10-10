@@ -10,9 +10,9 @@ let namespace = '/weixin/menu';
 module.exports = function (app) {
     let route = express.Router();
     //保存微信菜单
-    route.post(namespace + '/saveMenuEntity.htm',wxMenuCtrl.saveMenuEntity);
+    route.post(namespace + '/saveMenuEntity.htm', wxMenuCtrl.saveMenuEntity);
     //发布微信菜单
-    route.get(namespace + '/releaseMenu.htm',wxMenuCtrl.releaseMenu);
+    route.get(namespace + '/releaseMenu.htm', wxMenuCtrl.releaseMenu);
 
     app.use(route);
 };
