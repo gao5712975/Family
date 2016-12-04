@@ -39,6 +39,7 @@ angular.module('userModule',[])
         }
     });
 
+<<<<<<< HEAD
     $http.post(baseUrl + '/organize/findNextAllById.htm',{_id:'5795e2e8e1ea987d3ef25e27'}).success(function (res) {
         if(res && res.code == 200){
             console.info(res);
@@ -61,11 +62,14 @@ angular.module('userModule',[])
         });
     });
 
+=======
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 }])
 
 .controller('FileUploadCtrl',['$scope','$http',function ($scope,$http) {
     var uploader = WebUploader.create({
         auto:true,
+        compress:false,
         server: baseUrl + '/load/profile.htm',
         pick: '#fileUpload',
     })

@@ -9,7 +9,7 @@ var namespace = '/userDetail';
 
 module.exports = function (app) {
     let route = express.Router();
-    route.post(namespace + "/findList.htm",UserDetail.findList);
-    route.post(namespace + "/findById.htm",UserDetail.findById);
+    route.post(namespace + "/findList.htm", UserDetail.findList);
+    route.post(namespace + "/findById.htm", UserDetail.findById);
     app.use(route);
 };

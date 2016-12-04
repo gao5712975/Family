@@ -6,13 +6,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var RoleSchema = new Schema({
-    name:{
-        type:String
+    name: {
+        type: String
     },
-    authList:[
+    authList: [
         {
-            type:Schema.Types.ObjectId,
-            ref:'Auth'
+            type: Schema.Types.ObjectId,
+            ref: 'Auth'
         }
     ],
     create_time: {type: Date, default: new Date()},
@@ -25,10 +25,10 @@ var RoleSchema = new Schema({
 });
 
 RoleSchema.statics.findAllAuthById = function (id) {
-    return this.find({_id:id})
+    return this.findOne({ _id: id })
         .populate('authList').exec();
 };
 
 module.exports = function (db) {
-    db.model('Role', RoleSchema,'Role');
+    db.model('Role', RoleSchema, 'Role');
 };

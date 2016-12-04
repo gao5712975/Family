@@ -6,9 +6,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var OrganizeSchema = new Schema({
-    name:{
-        type:String
+    name: {
+        type: String
     },
+<<<<<<< HEAD
     agencyNumber:{
         type:String
     },
@@ -24,8 +25,15 @@ var OrganizeSchema = new Schema({
         enum:[0,1],
         default:0
     }
+=======
+    sort: {
+        type: Number
+    },
+    parentId: Schema.Types.ObjectId,
+    parentList: Array
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 });
 
 module.exports = function (db) {
-    db.model('Organize', OrganizeSchema,'Organize');
+    db.model('Organize', OrganizeSchema, 'Organize');
 };

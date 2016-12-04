@@ -14,38 +14,39 @@ let crypto = require('crypto');
 let async = require('async');
 
 exports.findList = function (req, res) {
-    Page(req.body.pageIndex,req.body.pageSize,User,{},(err,doc) => {
+    Page(req.body.pageIndex, req.body.pageSize, User, {}, (err, doc) => {
         if (err)
-            res.send({code: 500, msg: err});
+            res.send({ code: 500, msg: err });
         else
-            res.send({code: 200, doc: doc});
+            res.send({ code: 200, doc: doc });
     })
 };
 
 exports.findById = function (req, res) {
     User.findOne(req.body._id).then(
-        (doc) =>{
-            res.send({code:200,doc:doc});
+        (doc) => {
+            res.send({ code: 200, doc: doc });
         },
-        (err) =>{
-            User.errorSend(res,err);
+        (err) => {
+            User.errorSend(res, err);
         }
     )
 };
 
 exports.findUsersById = function (req, res) {
     User.findUsersById(req.body._id).then(
-        (doc) =>{
-            res.send({code:200,doc:doc});
+        (doc) => {
+            res.send({ code: 200, doc: doc });
         },
-        (err) =>{
+        (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     )
 };
 
 exports.saveEntity = function (req, res) {
+<<<<<<< HEAD
     User.findOne({user:req.body.user}).then(
         (doc) => {
             if(doc){
@@ -53,6 +54,12 @@ exports.saveEntity = function (req, res) {
             }else{
                 addUser();
             }
+=======
+    User.find({ user: req.body.user }).then(
+        (doc) => {
+            if (doc) res.send({ code: 500, doc: doc });
+            addUser();
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
         }
     );
     function addUser() {
@@ -60,14 +67,14 @@ exports.saveEntity = function (req, res) {
         req.body.userDetailId = _id;
         let user = new User(req.body);
         user.save().then(
-            (doc) =>{
-                let userDetails = new UserDetail({_id:_id,userId:doc._id});
+            (doc) => {
+                let userDetails = new UserDetail({ _id: _id, userId: doc._id });
                 userDetails.save().then();
-                res.send({code:200,doc:doc});
+                res.send({ code: 200, doc: doc });
             },
-            (err) =>{
+            (err) => {
                 res.statusCode = 500;
-                res.send({code:500,msg:err});
+                res.send({ code: 500, msg: err });
             }
         );
     }
@@ -75,85 +82,85 @@ exports.saveEntity = function (req, res) {
 
 exports.updatePassword = function (req, res) {
     User.updatePassword(req.body).then(
-        (doc) =>{
-            res.send({code:200,doc:doc});
+        (doc) => {
+            res.send({ code: 200, doc: doc });
         },
-        (err) =>{
+        (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     )
 };
 
 exports.removeEntityById = function (req, res) {
-    User.remove({_id:req.body._id}).then(
-        (doc) =>{
+    User.remove({ _id: req.body._id }).then(
+        (doc) => {
             removeUserDetail(req.body._id);
-            res.send({code:200,doc:doc});
+            res.send({ code: 200, doc: doc });
         },
-        (err) =>{
+        (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     );
     function removeUserDetail(id) {
-        UserDetail.remove({userId:id}).then();
+        UserDetail.remove({ userId: id }).then();
     }
 };
 
 exports.login = function (req, res) {
-    User.findOne({user:req.body.user,password:req.body.password}).then(
+    User.findOne({ user: req.body.user, password: req.body.password }).then(
         (doc) => {
-            if(!doc){
-                res.send({code:404});
-            } else{
+            if (!doc) {
+                res.send({ code: 404 });
+            } else {
                 let md5 = crypto.createHash('md5');
                 var sessionId = md5.update(`${doc._id}`).digest('hex');
-                res.set(Config.tokenHeaders,sessionId);
+                res.set(Config.tokenHeaders, sessionId);
                 async.series({
-                    user:function (done) {
-                        User.findUsersById({_id:doc._id}).then(
+                    user: function (done) {
+                        User.findUsersById({ _id: doc._id }).then(
                             (doc) => {
-                                done(null,doc);
+                                done(null, doc);
                             },
                             (err) => {
                                 done(err);
                             }
                         )
                     },
-                    auth:function (done) {
-                        Role.findAllAuthById({_id:doc.roleId}).then(
+                    auth: function (done) {
+                        Role.findAllAuthById({ _id: doc.roleId }).then(
                             (doc) => {
-                                done(null,doc);
+                                done(null, doc);
                             },
                             (err) => {
                                 done(err);
                             }
                         )
                     }
-                },function (err, result) {
-                    var _session = {user:result.user, authList:result.auth};
-                    Redis( (client) => {
-                        client.set(`${sessionId}`,JSON.stringify(_session));
+                }, function (err, result) {
+                    var _session = { user: result.user, authList: result.auth };
+                    Redis((client) => {
+                        client.set(`${sessionId}`, JSON.stringify(_session));
                         client.expire(`${sessionId}`, Config.sessionTtl);
                         client.quit();
-                        res.send({code:200,doc:doc,token:sessionId});
+                        res.send({ code: 200, doc: doc, token: sessionId });
                     });
                 });
             }
         },
-        (err) =>{
+        (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     )
 };
 
 exports.loginOut = function (req, res) {
     let token = req.get('express-token-key');
-    Redis( (client) => {
+    Redis((client) => {
         client.del(`${token}`);
         client.quit();
-        res.send({code:200});
+        res.send({ code: 200 });
     });
 };

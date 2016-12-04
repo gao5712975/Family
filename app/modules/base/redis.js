@@ -8,13 +8,13 @@ var async = require('async');
 module.exports = function (callback) {
     var client = redis.createClient();
     async.parallel({
-        init:function (done) {
+        init: function (done) {
             client.on("connect", function () {
-                done(null,client);
+                done(null, client);
             });
         }
-    },function (err, results) {
+    }, function (err, results) {
         var client = results.init;
-        callback(client,redis);
+        callback(client, redis);
     });
 };

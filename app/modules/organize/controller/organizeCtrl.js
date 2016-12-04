@@ -8,35 +8,35 @@ var Page = require('../../base/page');
 var Msg = require('../../../../config/massage')
 
 exports.findList = function (req, res) {
-    Page(req.body.pageIndex,req.body.pageSize,Organize,{},(err,doc) => {
+    Page(req.body.pageIndex, req.body.pageSize, Organize, {}, (err, doc) => {
         if (err)
-            res.send({code: 500, msg: err});
+            res.send({ code: 500, msg: err });
         else
-            res.send({code: 200, doc: doc});
+            res.send({ code: 200, doc: doc });
     })
 };
 
 exports.saveEntity = function (req, res) {
     var organize = new Organize(req.body);
     organize.save().then(
-        (doc) =>{
-            res.send({code:200,doc:doc});
+        (doc) => {
+            res.send({ code: 200, doc: doc });
         },
         (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     )
 };
 
 exports.findById = function (req, res) {
-    Organize.findOne({_id:req.body._id}).then(
-        (doc) =>{
-            res.send({code:200,doc:doc})
+    Organize.findOne({ _id: req.body._id }).then(
+        (doc) => {
+            res.send({ code: 200, doc: doc })
         },
-        (err) =>{
+        (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     )
 };
@@ -44,11 +44,11 @@ exports.findById = function (req, res) {
 exports.findAll = function (req, res) {
     Organize.find().then(
         (doc) => {
-            res.send({code:200,doc:doc})
+            res.send({ code: 200, doc: doc })
         },
         (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     )
 };
@@ -57,25 +57,34 @@ exports.findAll = function (req, res) {
  * 获取父级下所有的子集
  */
 exports.findNextAllById = function (req, res) {
+<<<<<<< HEAD
     Organize.findOne({_id:req.body._id}).then(
         (doc) =>{
             if(!doc) res.send({code:200,msg:Msg.not_data});
             Organize.find({parentId:doc._id}).then(
                 (arr) =>{
                     if(arr.length > 0){
+=======
+    Organize.findOne({ _id: req.body._id }).then(
+        (doc) => {
+            if (!doc) res.send({ code: 200, msg: '没有数据！' });
+            Organize.find({ parentId: doc._id }).then(
+                (arr) => {
+                    if (arr.length > 0) {
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
                         doc.parentList = arr;
-                        callback(doc,doc.parentList,0,(data) =>{
-                            res.send({code:200,doc:data});
+                        callback(doc, doc.parentList, 0, (data) => {
+                            res.send({ code: 200, doc: data });
                         });
-                    }else{
-                        res.send({code:200,doc:doc});
+                    } else {
+                        res.send({ code: 200, doc: doc });
                     }
                 }
             );
         },
-        (err) =>{
+        (err) => {
             res.statusCode = 500;
-            res.send({code:500,msg:err});
+            res.send({ code: 500, msg: err });
         }
     );
 
@@ -86,23 +95,23 @@ exports.findNextAllById = function (req, res) {
      * @param num
      * @param back
      */
-    function callback(doc,array,num,back) {
-        if(!num){
+    function callback(doc, array, num, back) {
+        if (!num) {
             num = 0;
         }
         var arr = [];
-        array.forEach((data) =>{
-            arr.push(Organize.find({parentId:data._id}));
+        array.forEach((data) => {
+            arr.push(Organize.find({ parentId: data._id }));
         });
         Promise.all(arr).then(
-            (arr) =>{
+            (arr) => {
                 num += arr.length;
-                for(var i = 0,j = arr.length;i<j;i++){
+                for (var i = 0, j = arr.length; i < j; i++) {
                     var data = arr[i];
-                    if(data.length > 0){
+                    if (data.length > 0) {
                         array[i].parentList = data;
-                        callback(doc,array[i].parentList,--num,back);
-                    }else{
+                        callback(doc, array[i].parentList, --num, back);
+                    } else {
                         --num;
                         num == 0 && back(doc);
                         console.info(num);

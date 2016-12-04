@@ -4,15 +4,17 @@
   <meta charset="UTF-8">
   <title>moka</title>
   <link rel="stylesheet" href="src/static/load/webuploader.css">
-  <link rel="stylesheet" href="src/static/chosen/chosen.css">
+  <link rel="stylesheet" href="src/static/ui-select/select.css">
   <script src="src/static/jquery/jquery.min.js"></script>
-  <script src="src/static/chosen/chosen.js"></script>
   <script src="src/static/load/webuploader.min.js"></script>
   <script src="src/static/angular/angular.min.js"></script>
+  <script src="src/static/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="src/static/ui-select/select.js"></script>
   <script src="src/static/ui.router/angular-ui-router.min.js"></script>
   <script src="src/app/application.js"></script>
   <script src="src/app/user/user.js"></script>
   <script src="src/app/agency/agency.js"></script>
+
 </head>
 <body>
 <div ng-controller="UserCtrl">
@@ -37,18 +39,39 @@
     <button ng-click="save()">用户提交</button>
   </form>
 
-  <div style="margin: 40px">
-    <select data-placeholder="请选择项目投放" class="chosen-select" style="width:250px;opacity:0">
-      <option value="">-- 请选择 --</option>
-      <option ng-repeat="o in organizeList" value="{{o._id}}">{{o.name}}</option>
-    </select>
-  </div>
+  <div style="height: 400px">
 
-  <div style="margin: 40px">
-    <select data-placeholder="请选择项目投放" class="chosen-select" style="width:250px;opacity:0">
-      <option value="">-- 请选择 --</option>
-      <option ng-repeat="o in organizeList" value="{{o._id}}">{{o.name}}</option>
-    </select>
+    <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="multipleDemo.colors">
+      <ui-select-match placeholder="Select colors...">{{$item}}</ui-select-match>
+      <ui-select-choices repeat="color in availableColors | filter:$select.search">
+        {{color}}
+      </ui-select-choices>
+    </ui-select>
+
+    <ui-select ng-model="colors">
+      <ui-select-match placeholder="Select colors..."><span ng-bind="$select.selected.name"></span></ui-select-match>
+      <ui-select-choices repeat="o in (organizeList | filter: $select.search) track by o._id">
+        <span ng-bind="o.name"></span>
+      </ui-select-choices>
+    </ui-select>
+
+    <ui-select ng-model="selected.value">
+      <ui-select-match>
+        <span ng-bind="$select.selected.name"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
+        <span ng-bind="item.name"></span>
+      </ui-select-choices>
+    </ui-select>
+
+    <ui-select ng-model="selectedItem">
+      <ui-select-match>
+        <span ng-bind="$select.selectedItem"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="o in (organizeList | filter: $select.search) track by o._id">
+        <span ng-bind="o.name"></span>
+      </ui-select-choices>
+    </ui-select>
   </div>
 
 </div>

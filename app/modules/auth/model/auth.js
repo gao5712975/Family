@@ -6,12 +6,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var AuthSchema = new Schema({
-    name:{
-        type:String
+    name: {
+        type: String
     },
-    marking:{
-        type:String
+    marking: {
+        type: String
     },
+<<<<<<< HEAD
     type:{
         type:String,
         enum:[0,1]
@@ -22,9 +23,14 @@ var AuthSchema = new Schema({
         type:Number,
         enum:[0,1],
         default:0
+=======
+    type: {
+        type: String,
+        enum: [0, 1]
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
     }
 });
 
 module.exports = function (db) {
-    db.model('Auth', AuthSchema,'Auth');
+    db.model('Auth', AuthSchema, 'Auth');
 };

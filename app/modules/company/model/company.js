@@ -5,9 +5,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CompanySchema = new Schema({
-    name:{
-        type:String
+    name: {
+        type: String
     },
+<<<<<<< HEAD
     rul:{
         type:String
     },
@@ -17,9 +18,13 @@ var CompanySchema = new Schema({
         type:Number,
         enum:[0,1],
         default:0
+=======
+    rul: {
+        type: String
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
     }
 });
 
 module.exports = function (db) {
-    db.model('Company', CompanySchema,'Company');
+    db.model('Company', CompanySchema, 'Company');
 };

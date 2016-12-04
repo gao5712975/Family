@@ -22,8 +22,16 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
     "express": "^4.14.0",
+<<<<<<< HEAD
     "glob": "^7.1.1",
     "mongoose": "^4.7.1",
+=======
+    "express-session": "^1.14.0",
+    "file-stream-rotator": "0.0.7",
+    "glob": "^7.0.5",
+    "log4js": "^0.6.38",
+    "mongoose": "^4.5.8",
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
     "morgan": "^1.7.0",
     "multer": "^1.2.0",
     "node-schedule": "^1.1.1",
