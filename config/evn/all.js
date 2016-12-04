@@ -4,17 +4,9 @@
 "use strict";
 
 module.exports = {
-<<<<<<< HEAD
-<<<<<<< HEAD
     baseUrl:'//127.0.0.1',
     fileUrl:'//127.0.0.1',
     url:'mongodb://127.0.0.1/moka',
-=======
-    url: 'mongodb://127.0.0.1/moka',
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-=======
-    url: 'mongodb://127.0.0.1/moka',
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
     port: 80,
     bodyParser: {
         json: { limit: '150kb' },

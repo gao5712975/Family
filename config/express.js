@@ -13,6 +13,10 @@ var express = require('express'),
     // redisStore = require('connect-redis')(session),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    flash = require('connect-flash'),
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 =======
     flash = require('connect-flash'),
 >>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
@@ -54,57 +58,23 @@ module.exports = function (db) {
 
     //静态文件 // Setting the app router and static folder
     app.use(express.static('public'));
-<<<<<<< HEAD
-<<<<<<< HEAD
     app.use('/uploads',express.static('uploads'));
     app.use(express.static('www'));
-
-=======
-=======
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-    app.use(express.static('www'));
-
-    app.use(flash());
-
-<<<<<<< HEAD
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-=======
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
     app.use(favicon('public/favicon/favicon.ico'));
 
     app.all('*', function (req, res, next) {
         let url = Url.parse(req.originalUrl).pathname;
         let token = req.get(Config.tokenHeaders);
-<<<<<<< HEAD
-<<<<<<< HEAD
         console.info(token);
         if(config.whiteUrlList.indexOf(url) != -1){
-=======
-        if (config.whiteUrlList.indexOf(url) != -1) {
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-=======
-        if (config.whiteUrlList.indexOf(url) != -1) {
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
             Redis((client) => {
                 client.get(`${token}`, (err, doc) => {
                     if (doc) {
                         client.expire(`${token}`, Config.sessionTtl);
                         client.quit();
-<<<<<<< HEAD
-<<<<<<< HEAD
                         if(url == '/user/login.htm'){
                             res.send({code:200,token:token});
                         }else{
-=======
-                        if (url == '/user/login.htm') {
-                            res.send({ code: 200, doc: JSON.parse(doc) });
-                        } else {
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-=======
-                        if (url == '/user/login.htm') {
-                            res.send({ code: 200, doc: JSON.parse(doc) });
-                        } else {
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
                             next();
                         }
                     } else {

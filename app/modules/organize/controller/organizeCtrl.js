@@ -57,27 +57,12 @@ exports.findAll = function (req, res) {
  * 获取父级下所有的子集
  */
 exports.findNextAllById = function (req, res) {
-<<<<<<< HEAD
-<<<<<<< HEAD
     Organize.findOne({_id:req.body._id}).then(
         (doc) =>{
             if(!doc) res.send({code:200,msg:Msg.not_data});
             Organize.find({parentId:doc._id}).then(
                 (arr) =>{
                     if(arr.length > 0){
-=======
-=======
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-    Organize.findOne({ _id: req.body._id }).then(
-        (doc) => {
-            if (!doc) res.send({ code: 200, msg: '没有数据！' });
-            Organize.find({ parentId: doc._id }).then(
-                (arr) => {
-                    if (arr.length > 0) {
-<<<<<<< HEAD
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-=======
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
                         doc.parentList = arr;
                         callback(doc, doc.parentList, 0, (data) => {
                             res.send({ code: 200, doc: data });

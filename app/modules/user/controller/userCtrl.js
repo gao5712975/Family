@@ -46,8 +46,6 @@ exports.findUsersById = function (req, res) {
 };
 
 exports.saveEntity = function (req, res) {
-<<<<<<< HEAD
-<<<<<<< HEAD
     User.findOne({user:req.body.user}).then(
         (doc) => {
             if(doc){
@@ -55,14 +53,7 @@ exports.saveEntity = function (req, res) {
             }else{
                 addUser();
             }
-=======
-=======
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-    User.find({ user: req.body.user }).then(
-        (doc) => {
-            if (doc) res.send({ code: 500, doc: doc });
-            addUser();
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
+
         }
     );
     function addUser() {
