@@ -6,3 +6,4 @@ uploads
 .vscode
 test
 dump.rdb
+/logs
