@@ -10,7 +10,6 @@ var express = require('express'),
     // session = require("express-session"),
     // mongoStore = require('connect-mongo')(session),
     // redisStore = require('connect-redis')(session),
-    // flash = require('connect-flash'),
     logger = require('morgan'),
     bodyParser = require("body-parser"),
     cookieParser = require("cookie-parser"),
@@ -36,8 +35,6 @@ module.exports = function (db) {
     app.use(express.static('public'));
     app.use('/uploads',express.static('uploads'));
     app.use(express.static('www'));
-
-    // app.use(flash());
 
     app.use(favicon('public/favicon/favicon.ico'));
 
@@ -94,7 +91,6 @@ module.exports = function (db) {
     config.getGlobFiles("./app/modules/base/**Auto.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);
     });
-
 
     config.getGlobFiles("./app/business/weixin/route/**.js").forEach(function (modelPath) {
         require(path.resolve(modelPath))(app);

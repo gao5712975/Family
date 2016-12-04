@@ -132,7 +132,7 @@
     ./mongod --dbpath /d/Program\ Files/MongoDB/data/db/ --logpath /d/Program\ Files/MongoDB/data/log/mongodb.log --logappend &
 
 #windows 安装mongodb
-mongod.exe --logpath "d:\Program Files\MongoDB\data\log\mongodb.log" --logappend --dbpath "d:\Program Files\MongoDB\data\db" --serviceName 'MongoDB' --serviceDisplayName 'MongoDB' --install
+mongod.exe --logpath "d:\Program Files\MongoDB\data\log\mongodb.log" --logappend --dbpath "d:\Program Files\MongoDB\data\db" --serviceName MongoDB --serviceDisplayName MongoDB --install
 
 ###修改Collection名称 
     db.getCollection('Agency').renameCollection('Organize')
