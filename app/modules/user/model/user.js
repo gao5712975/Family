@@ -43,6 +43,7 @@ let UserSchema = new Schema({
         default: 0
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
     sort:Number,
     create_time: {type: Date, default: new Date()},
     update_time: {type: Date, default: new Date()},
@@ -51,6 +52,11 @@ let UserSchema = new Schema({
         enum:[0,1],
         default:0
     }
+=======
+    sort: Number,
+    create_time: { type: Date, default: new Date() },
+    update_time: { type: Date, default: new Date() }
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 =======
     sort: Number,
     create_time: { type: Date, default: new Date() },

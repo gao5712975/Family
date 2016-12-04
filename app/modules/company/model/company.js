@@ -9,6 +9,7 @@ var CompanySchema = new Schema({
         type: String
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
     rul:{
         type:String
     },
@@ -18,6 +19,10 @@ var CompanySchema = new Schema({
         type:Number,
         enum:[0,1],
         default:0
+=======
+    rul: {
+        type: String
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 =======
     rul: {
         type: String

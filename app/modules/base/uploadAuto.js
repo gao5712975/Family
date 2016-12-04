@@ -40,6 +40,7 @@ var upload = multer({
 module.exports = function (app) {
     app.post('/load/profile.htm', upload.any(), function (req, res) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         var files = req.files;
         if(files && files.lenght > 0){
             files.forEach(function(f){
@@ -47,6 +48,9 @@ module.exports = function (app) {
             })
         }
         res.send({code: 200, doc: files})
+=======
+        res.send({ code: 200, doc: req.files })
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 =======
         res.send({ code: 200, doc: req.files })
 >>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b

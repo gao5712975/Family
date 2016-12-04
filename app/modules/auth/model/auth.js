@@ -13,6 +13,7 @@ var AuthSchema = new Schema({
         type: String
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
     type:{
         type:String,
         enum:[0,1]
@@ -23,6 +24,11 @@ var AuthSchema = new Schema({
         type:Number,
         enum:[0,1],
         default:0
+=======
+    type: {
+        type: String,
+        enum: [0, 1]
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 =======
     type: {
         type: String,

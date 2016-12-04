@@ -8,6 +8,7 @@ var Schema = mongoose.Schema;
 var OrganizeSchema = new Schema({
     name: {
         type: String
+<<<<<<< HEAD
     },
 <<<<<<< HEAD
     agencyNumber:{
@@ -26,11 +27,17 @@ var OrganizeSchema = new Schema({
         default:0
     }
 =======
+=======
+    },
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
     sort: {
         type: Number
     },
     parentId: Schema.Types.ObjectId,
     parentList: Array
+<<<<<<< HEAD
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
+=======
 >>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 });
 

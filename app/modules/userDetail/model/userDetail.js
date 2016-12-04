@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var UserDetailSchema = new Schema({
 <<<<<<< HEAD
+<<<<<<< HEAD
     userId:{type:Schema.Types.ObjectId,ref:'User'},
     valid:{type:Number,default:0},
     sort:{type:Number},
@@ -18,11 +19,16 @@ var UserDetailSchema = new Schema({
         default:0
     }
 =======
+=======
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     valid: { type: Number, default: 0 },
     sort: Number,
     create_time: { type: Date, default: new Date() },
     update_time: { type: Date, default: new Date() }
+<<<<<<< HEAD
+>>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
+=======
 >>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
 });
 
