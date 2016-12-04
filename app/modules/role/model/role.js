@@ -14,7 +14,14 @@ var RoleSchema = new Schema({
             type:Schema.Types.ObjectId,
             ref:'Auth'
         }
-    ]
+    ],
+    create_time: {type: Date, default: new Date()},
+    update_time: {type: Date, default: new Date()},
+    state:{
+        type:Number,
+        enum:[0,1],
+        default:0
+    }
 });
 
 RoleSchema.statics.findAllAuthById = function (id) {

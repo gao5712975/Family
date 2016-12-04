@@ -62,6 +62,7 @@
 </div>
 <div ng-controller="FileUploadCtrl">
   <div id="fileUpload">上传</div>
+  <a ng-href="{{filePath}}" target="_blank">查看</a>
   <form action="/load/profile.htm" ENCTYPE="multipart/form-data" method="post">
     <input type="file" name="file" multiple="multiple">
     <input type="submit" value="上传">

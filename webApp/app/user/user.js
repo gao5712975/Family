@@ -39,6 +39,12 @@ angular.module('userModule',[])
         }
     });
 
+    $http.post(baseUrl + '/organize/findNextAllById.htm',{_id:'5795e2e8e1ea987d3ef25e27'}).success(function (res) {
+        if(res && res.code == 200){
+            console.info(res);
+        }
+    });
+
     $(function () {
         $q.all([organize]).then(function () {
             setTimeout(function () {
@@ -63,17 +69,21 @@ angular.module('userModule',[])
         server: baseUrl + '/load/profile.htm',
         pick: '#fileUpload',
     })
-    uploader.on('uploadSuccess',function(file){
+    uploader.on('uploadSuccess',function(file,res){
         console.info(file)
+        console.info(res)
+        $scope.$apply(function(){
+            $scope.filePath = res.doc[0].path;
+        })
     })
 }])
 
 .controller('LoginCtrl',['$scope','$http',function ($scope,$http) {
     $scope.user = {user:'admin',password:'666666'}
     $scope.login = function () {
-        $http.post(baseUrl + '/user/login.htm/',$scope.user).success(function (res) {
+        $http.post(baseUrl + '/user/login.htm',$scope.user).success(function (res) {
             if(res && res.code == 200){
-                window.sessionStorage.setItem('token',res.doc._id);
+                window.sessionStorage.setItem('token',res.token);
             }
         })
     }

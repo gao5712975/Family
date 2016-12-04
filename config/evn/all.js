@@ -4,6 +4,8 @@
 "use strict";
 
 module.exports = {
+    baseUrl:'//127.0.0.1',
+    fileUrl:'//127.0.0.1',
     url:'mongodb://127.0.0.1/moka',
     port: 80,
     bodyParser: {
@@ -25,7 +27,6 @@ module.exports = {
     whiteUrlList:[
         '/user/login.htm',
         '/weixin',
-        '/load/profile.htm',
-        '/organize/findAll.htm'
+        '/load/profile.htm'
     ]
 };

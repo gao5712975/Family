@@ -129,9 +129,10 @@
     开机自启动
     export PATH=$PATH:/opt/mongodb/bin
     mongod --dbpath /opt/mongodb/data/db/ --logpath /opt/mongodb/data/logs/mongodb.log --logappend &
+    ./mongod --dbpath /d/Program\ Files/MongoDB/data/db/ --logpath /d/Program\ Files/MongoDB/data/log/mongodb.log --logappend &
 
 #windows 安装mongodb
-mongod.exe --logpath "d:\Program Files\MongoDB\data\log\mongodb.log" --logappend --dbpath "d:\Program Files\MongoDB\data\db" --serviceName MongoDB --serviceDisplayName MongoDB --install
+mongod.exe --logpath "d:\Program Files\MongoDB\data\log\mongodb.log" --logappend --dbpath "d:\Program Files\MongoDB\data\db" --serviceName 'MongoDB' --serviceDisplayName 'MongoDB' --install
 
 ###修改Collection名称 
     db.getCollection('Agency').renameCollection('Organize')
@@ -192,6 +193,7 @@ mongod.exe --logpath "d:\Program Files\MongoDB\data\log\mongodb.log" --logappend
 ##整库备份
     mongodump -h dbhost -d dbname -o dbdirectory
     mongodump -h 127.0.0.1 -d moka -o ~/github/Family/public/mongodb/back/
+    mongodump.exe -h 127.0.0.1 -d moka -o /d/work/Family/mongodbBack/mongodb/back
     mongodump -h 127.0.0.1 -d moka -o public/mongodb/back/
     -h：MongDB所在服务器地址，例如：127.0.0.1，当然也可以指定端口号：127.0.0.1:27017
     -d：需要备份的数据库实例，例如：test

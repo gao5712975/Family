@@ -44,7 +44,12 @@ let UserSchema = new Schema({
     },
     sort:Number,
     create_time: {type: Date, default: new Date()},
-    update_time: {type: Date, default: new Date()}
+    update_time: {type: Date, default: new Date()},
+    state:{
+        type:Number,
+        enum:[0,1],
+        default:0
+    }
 });
 
 UserSchema.statics.findUsersById = function (id) {

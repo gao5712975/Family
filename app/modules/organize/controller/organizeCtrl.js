@@ -5,6 +5,7 @@
 var mongoose = require("mongoose");
 var Organize = mongoose.model('Organize');
 var Page = require('../../base/page');
+var Msg = require('../../../../config/massage')
 
 exports.findList = function (req, res) {
     Page(req.body.pageIndex,req.body.pageSize,Organize,{},(err,doc) => {
@@ -52,10 +53,13 @@ exports.findAll = function (req, res) {
     )
 };
 
+/**
+ * 获取父级下所有的子集
+ */
 exports.findNextAllById = function (req, res) {
     Organize.findOne({_id:req.body._id}).then(
         (doc) =>{
-            if(!doc) res.send({code:200,msg:'没有数据！'});
+            if(!doc) res.send({code:200,msg:Msg.not_data});
             Organize.find({parentId:doc._id}).then(
                 (arr) =>{
                     if(arr.length > 0){

@@ -34,16 +34,18 @@ module.exports = function (db) {
 
     //静态文件 // Setting the app router and static folder
     app.use(express.static('public'));
-    // app.use(express.static('www'));
+    app.use('/uploads',express.static('uploads'));
+    app.use(express.static('www'));
 
     // app.use(flash());
 
-    // app.use(favicon('public/favicon/favicon.ico'));
+    app.use(favicon('public/favicon/favicon.ico'));
 
     app.all('*',function (req, res, next) {
         let url = Url.parse(req.originalUrl).pathname;
         console.info(url);
         let token = req.get(Config.tokenHeaders);
+        console.info(token);
         if(config.whiteUrlList.indexOf(url) != -1){
             Redis((client) => {
                 client.get(`${token}`,(err,doc) => {
@@ -51,7 +53,7 @@ module.exports = function (db) {
                         client.expire(`${token}`, Config.sessionTtl);
                         client.quit();
                         if(url == '/user/login.htm'){
-                            res.send({code:200});
+                            res.send({code:200,token:token});
                         }else{
                             next();
                         }

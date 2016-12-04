@@ -8,9 +8,14 @@ var Schema = mongoose.Schema;
 var UserDetailSchema = new Schema({
     userId:{type:Schema.Types.ObjectId,ref:'User'},
     valid:{type:Number,default:0},
-    sort:Number,
+    sort:{type:Number},
     create_time: {type: Date, default: new Date()},
-    update_time: {type: Date, default: new Date()}
+    update_time: {type: Date, default: new Date()},
+    state:{
+        type:Number,
+        enum:[0,1],
+        default:0
+    }
 });
 
 module.exports = function (db) {

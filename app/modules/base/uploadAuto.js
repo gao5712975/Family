@@ -5,11 +5,12 @@
 var multer = require('multer');
 var uuid = require('uuid');
 var fs = require('fs');
+var config = require('../../../config/config');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         var _date = new Date();
-        var _path = `uploads/${_date.getFullYear()}/${_date.getMonth()}/${_date.getDate()}`;
+        var _path = `uploads/${_date.getFullYear()}/${_date.getMonth() + 1}/${_date.getDate()}`;
         var _array = _path.split('/');
         
         var _p = '';
@@ -22,6 +23,7 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         file.filename = uuid.v4() + '-' + file.originalname;
+        file.host = config.fileUrl;
         cb(null, file.filename)
     }
 });
@@ -37,6 +39,12 @@ var upload = multer({
 
 module.exports = function (app) {
     app.post('/load/profile.htm', upload.any(), function (req, res) {
-        res.send({code: 200, doc: req.files})
+        var files = req.files;
+        if(files && files.lenght > 0){
+            files.forEach(function(f){
+                f.filePath = config.fileUrl + '\\' + f.path
+            })
+        }
+        res.send({code: 200, doc: files})
     })
 };

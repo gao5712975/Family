@@ -1,15 +1,25 @@
 /**
- * Created by Yuan on 2016/7/19.
+ * 菜单
  */
+'use strict';
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var CompanySchema = new Schema({
+var MenuSchema = new Schema({
     name:{
         type:String
     },
-    rul:{
+    url:{
         type:String
+    },
+    icon:{
+        type:String
+    },
+    sort:{
+        type:Number
+    },
+    parentId:{
+        type:Schema.Types.ObjectId
     },
     create_time: {type: Date, default: new Date()},
     update_time: {type: Date, default: new Date()},
@@ -18,8 +28,8 @@ var CompanySchema = new Schema({
         enum:[0,1],
         default:0
     }
-});
+})
 
 module.exports = function (db) {
-    db.model('Company', CompanySchema,'Company');
+    db.model('Menu', MenuSchema,'Menu');
 };

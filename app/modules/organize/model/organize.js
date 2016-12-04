@@ -9,11 +9,21 @@ var OrganizeSchema = new Schema({
     name:{
         type:String
     },
-    sort:{
-        type:Number  
+    agencyNumber:{
+        type:String
     },
     parentId: Schema.Types.ObjectId,
-    parentList:Array
+    parentList:Array,
+    sort:{
+        type:Number
+    },
+    create_time: {type: Date, default: new Date()},
+    update_time: {type: Date, default: new Date()},
+    state:{
+        type:Number,
+        enum:[0,1],
+        default:0
+    }
 });
 
 module.exports = function (db) {

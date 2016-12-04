@@ -18,7 +18,12 @@ gulp.task('default', function () {
             'gulpfile.js',
             'webApp',
             'www',
-            'node_modules'
+            'node_modules',
+            'uploads',
+            'package.json',
+            '.gitignore',
+            'README.md',
+            'mongodb'
         ]
     }).on('restart', function () {
         console.log('restarted!')

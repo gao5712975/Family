@@ -9,6 +9,7 @@ var Role = mongoose.model('Role');
 let Page = require('../../base/page');
 let Redis = require('../../base/redis');
 let Config = require('../../../config/config');
+let Msg = require('../../../../config/massage');
 let crypto = require('crypto');
 let async = require('async');
 
@@ -45,10 +46,13 @@ exports.findUsersById = function (req, res) {
 };
 
 exports.saveEntity = function (req, res) {
-    User.find({user:req.body.user}).then(
+    User.findOne({user:req.body.user}).then(
         (doc) => {
-            if(doc) res.send({code:500,doc:doc});
-            addUser();
+            if(doc){
+                res.send({code:500,doc:doc,msg:Msg.user_add});
+            }else{
+                addUser();
+            }
         }
     );
     function addUser() {

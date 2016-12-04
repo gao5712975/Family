@@ -15,6 +15,13 @@ var AuthSchema = new Schema({
     type:{
         type:String,
         enum:[0,1]
+    },
+    create_time: {type: Date, default: new Date()},
+    update_time: {type: Date, default: new Date()},
+    state:{
+        type:Number,
+        enum:[0,1],
+        default:0
     }
 });
 
