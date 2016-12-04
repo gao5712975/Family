@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "del": "^2.2.2",
+    "file-stream-rotator": "0.0.7",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-nodemon": "^2.2.1",

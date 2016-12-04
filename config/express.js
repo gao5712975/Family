@@ -11,18 +11,6 @@ var express = require('express'),
     // session = require("express-session"),
     // mongoStore = require('connect-mongo')(session),
     // redisStore = require('connect-redis')(session),
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    flash = require('connect-flash'),
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-=======
-    flash = require('connect-flash'),
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
-=======
-    flash = require('connect-flash'),
->>>>>>> b0ece57ba5804a710060af70a478d2711f5fe03b
     logger = require('morgan'),
     loggerPath = path.join(__dirname, '../logs'),
     fileStreamRotator = require('file-stream-rotator'),
